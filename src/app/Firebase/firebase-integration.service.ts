@@ -1,39 +1,110 @@
 import { Injectable } from '@angular/core';
 import { FirebaseApp, initializeApp, getApps } from "firebase/app"
 import {environment} from "../../environments/environment";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, setPersistence, browserSessionPersistence } from "firebase/auth";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, sendEmailVerification, applyActionCode ,setPersistence, browserLocalPersistence, signOut, createUserWithEmailAndPassword } from "firebase/auth";
+import firebase from "firebase/compat";
+import User = firebase.User;
+import {Router} from "@angular/router";
+import {APP_BASE_HREF} from "@angular/common";
 @Injectable({
   providedIn: 'root'
 })
 export class FirebaseIntegrationService {
   app;
   auth;
+  public user = null;
 
-  constructor() {
+  getResultMessage(err: string) {
+    switch(err) {
+      case "auth/invalid-email":
+        return "Email specified is invalid."
+      case "auth/invalid-credential":
+        return "The email/password specified is incorrect."
+      default:
+        return "Unknown Error Occurred."
+    }
+  }
+
+  constructor(private router: Router) {
     if (getApps().length === 0) {
       this.app = initializeApp(environment.firebaseConfig);
     } else {
       this.app = getApps()[0];
     }
     this.auth = getAuth(this.app);
-    console.log(`Initialized Firebase Application: ${this.app.name}`);
-    setPersistence(this.auth, browserSessionPersistence).then(() =>
-      onAuthStateChanged(this.auth, (user) => {
-        if (user) {
-        } else {
-          // User is signed out
-          // ...
-          console.log(`User isn't logged in, --Signing into developer@local.net`);
-          signInWithEmailAndPassword(
-            this.auth,
-            environment.DeveloperEmailSignin,
-            environment.DeveloperPasswordSignin
-          ).then((userCredential) => {
-          }).catch((error) => {
-            console.log(`${error.code} - ${error.message}`)
-          });
-        }
+    //signOut(this.auth).then(r => {});
+    onAuthStateChanged(this.auth, (user) => {
+      if (user) {
+        this.user = user;
+      } else {
+        // User is signed out
+        // ...
+        this.router.navigateByUrl("/login");
+      }
+    });
+  }
+
+  public async LoginUser(email: string, password: string) {
+    return await setPersistence(this.auth, browserLocalPersistence).then(()=> {
+      return signInWithEmailAndPassword(
+        this.auth,
+        email,
+        password
+      ).then((userCredential) => {
+        this.user = userCredential.user;
+        return "no-error";
+      }).catch((error) => {
+        return this.getResultMessage(error.code);
+      });
+    });
+  }
+
+  public async createUser(email: string, password: string) {
+    return await createUserWithEmailAndPassword(this.auth, email, password).then((userCred) => {
+      this.user = userCred.user;
+      sendEmailVerification(userCred.user, {
+        url:location.origin+"/email/verify",
+      }).then((e)=> { })
+      return "Success";
+    }).catch((err) => {
+      return `Error Occurred: ${err}`;
+    });
+  }
+
+  public async verifyEmail(actionCode: string) {
+    return await applyActionCode(this.auth, actionCode).then((resp) => {
+      var u: User = this.user;
+      u.reload().then((f)=> {
+        setTimeout(function () {
+          this.router.navigateByUrl("/dashboard");
+        }, 5000)
       })
-    );
+      return "Success";
+    }).catch((err)=>{
+      return err.code;
+    })
+  }
+
+  public async sendEmailVerification(user: User) {
+    console.log('trying to send email')
+    return await sendEmailVerification(user, {
+      url:location.origin+"/email/verify",
+    }).then((e)=> { return "Success" }, (err)=> {
+      return err.code;
+    })
+  }
+
+  public isEmailVerified() {
+    if (this.user) {
+      return this.user.emailVerified;
+    }
+    return false;
+  }
+
+  public async signOut() {
+    return await signOut(this.auth).then(() => {
+      this.user = null;
+      this.router.navigateByUrl("/login")
+    });
   }
 }

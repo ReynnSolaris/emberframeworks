@@ -2,6 +2,17 @@
   <mat-toolbar color="primary">
     EmberFrameworks LLC Management Dashboard
     <span class="spacer"></span>
-    <mat-icon class="example-icon" aria-hidden="false" aria-label="Example user verified icon">verified_user</mat-icon>
+
+    <button mat-mini-fab color="dark" matTooltip="User is {{_auth.isEmailVerified() ? 'verified.' : 'not verified.'}}" >
+      <mat-icon
+        class="example-icon"
+        aria-hidden="false">
+        {{_auth.isEmailVerified() ? "verified_user" : "gpp_bad"}}
+      </mat-icon>
+    </button>
+    <span style="flex: .005 max-content"></span>
+    <button mat-mini-fab color="dark" matTooltip="Log Out" (click) = "this._auth.signOut()">
+      <mat-icon>logout</mat-icon>
+    </button>
   </mat-toolbar>
 </div>

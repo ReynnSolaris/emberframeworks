@@ -1,0 +1,8 @@
+<app-navigationbar></app-navigationbar>
+<div *ngIf="this._auth.user && this._auth.user.uid == '3CSq75BgQ7VQga27d5ms4rtIu342'">
+  Hello Dad
+  <br/>
+  <button mat-icon-button matTooltip="Send Verification Email" (click)="sendEmailVerification()">
+    <mat-icon>outgoing_mail</mat-icon>
+  </button>
+</div>

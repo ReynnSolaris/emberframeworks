@@ -1,0 +1,9 @@
+.mat-stepper-horizontal {
+  margin-top: 8px;
+  width: 35%;
+}
+.centeredDiv {
+  display: flex;
+  align-content: center!important;
+  justify-content: center!important;
+}

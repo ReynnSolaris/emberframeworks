@@ -2,3 +2,15 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+h1 {
+  text-align: center;
+}
+
+a:visited {
+  text-decoration: none;
+  color: #55f
+}
+a {
+  text-decoration: none;
+  color: #55f
+}

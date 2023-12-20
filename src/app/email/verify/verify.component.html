@@ -1,0 +1,69 @@
+<div *ngIf="!enabled" style=" width:100%; height: 100%; background: #000; opacity: 50%; position: absolute!important;" class="centeredDiv">
+  <div style="position:fixed;top:50%;left:50%">
+    <mat-spinner></mat-spinner>
+  </div>
+
+</div>
+<div class="centeredDiv">
+  <mat-stepper [linear]="true" #stepper>
+    <mat-step>
+      <ng-template matStepLabel>Email Verification</ng-template>
+      <mat-divider></mat-divider>
+      <!--  Success   -->
+      <p style="font-size: 18px" *ngIf="!otherError && !invalidCode && enabled" >
+        Hi {{ this._auth.user?.displayName }},
+        <br/><br/>
+        Fantastic news! Your email has been successfully verified, and you're now all set to explore Ember Frameworks to the fullest. 🚀
+        <br/><br/>
+        Thank you for confirming your email address.
+        <br/><br/>
+        If you have any questions or if there's anything we can assist you with, feel free to reach out to our support team at <span style="font-weight: bold; color: chocolate">[support&commat;emberframeworks.com]</span>.
+        <br/><br/>
+        Get ready to unleash your creativity with Ember Frameworks!
+        <br/><br/>
+        Best regards,<br/>
+        The Ember Frameworks Team
+      </p>
+      <!--  Invalid Code   -->
+      <p style="font-size: 18px" *ngIf="invalidCode" >
+        Hi {{ this._auth.user?.displayName }},
+        <br/><br/>
+        We hope you're doing well. It appears that the verification code we sent to your email for Ember Frameworks has expired.
+        <br/><br/>
+        Verification codes have a limited validity for security reasons.
+        <br/><br/>
+        Please click [<a routerLink="/email/resend" routerLinkActive="active">here</a>] to request a new verification code. Make sure to use the most recent code sent to you.
+        <br/><br/>
+        If you encounter any difficulties or have questions, our support team at <span style="font-weight: bold; color: chocolate">[support&commat;emberframeworks.com]</span> is ready to assist you.
+        <br/><br/>
+        Thank you for your understanding and prompt attention to this matter!
+        <br/><br/>
+        Best regards,<br/>
+        The Ember Frameworks Team
+      </p>
+      <!--  Other Error   -->
+      <p style="font-size: 18px" *ngIf="otherError" >
+        Hi {{ this._auth.user?.displayName }},
+        <br/><br/>
+        We hope this message finds you well. Unfortunately, it seems that an unexpected error occurred while trying to verify your email for Ember Frameworks.
+        <br/><br/>
+        We apologize for any inconvenience this may have caused. Here are a few steps to help resolve the issue:
+        <br/><br/>
+        <b>1. </b>Please double-check the verification link or code provided in your email.<br/>
+        <b>2. </b>If the problem persists, try refreshing the page or clearing your browser cache.<br/>
+        <b>3. </b>Ensure that you are using a supported browser for the best experience.<br/>
+        <br/><br/>
+        If the issue continues, our support team is ready to assist. Please reach out to us at <span style="font-weight: bold; color: chocolate">[support&commat;emberframeworks.com]</span>, and we'll work to resolve the problem promptly.
+        <br/><br/>
+        We appreciate your patience and understanding as we address this issue.
+        <br/><br/>
+        Best regards,<br/>
+        The Ember Frameworks Team
+      </p>
+      <p style="font-size: 14px; text-align: center!important;">
+        This page should auto redirect after 10s or press <a routerLink="/dashboard">here</a>.
+      </p>
+      <mat-divider></mat-divider>
+    </mat-step>
+  </mat-stepper>
+</div>
