@@ -6,6 +6,8 @@ import {DashboardComponent} from "./dashboard/dashboard.component";
 import {VerifyComponent} from "./email/verify/verify.component";
 import {SignupComponent} from "./signup/signup.component";
 import {ResendComponent} from "./email/resend/resend.component";
+import {AuthGuard} from "./Guards/Auth.guard";
+import {HomeComponent} from "./home/home.component";
 
 const routes: Routes = [
   //Authentication
@@ -21,20 +23,26 @@ const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
+    canActivate: [AuthGuard],
   },
   // Email
   {
     path: 'email/verify',
-    component: VerifyComponent
+    component: VerifyComponent,
   },
   {
     path: 'email/resend',
-    component: ResendComponent
+    component: ResendComponent,
+    canActivate: [AuthGuard],
   },
   // General
   {
     path: '*',
-    component: DashboardComponent
+    component: HomeComponent
+  },
+  {
+    path: '',
+    component: HomeComponent
   }
 ];
 

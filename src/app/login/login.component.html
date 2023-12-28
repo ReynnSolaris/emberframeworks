@@ -20,7 +20,11 @@
           Please provide a valid password
         </mat-error>
       </mat-form-field>
-      <button mat-raised-button color="primary" [disabled]="!loginForm.valid">Login</button>
+      <div style="display: flex; justify-content: center!important; align-content: center!important;">
+        <button mat-raised-button color="primary" [disabled]="!loginForm.valid">Login</button>
+        <span style="flex: 0.25 auto"></span>
+        <button mat-raised-button color="warn" routerLink="">Back</button>
+      </div>
     </form>
     <br/>
     <mat-error *ngIf="errorMsg != ''">

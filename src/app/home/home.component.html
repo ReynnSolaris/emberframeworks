@@ -1,0 +1,24 @@
+<div class="container">
+  <div class="content">
+    <h1>Welcome to Ember Frameworks</h1>
+    <div *ngIf = "this.auth.user == null">
+      <p>Please sign in to access the dashboard and other features.</p>
+      <div style="display: flex; flex-direction: row; align-content: center!important; justify-content: center!important;">
+        <button matTooltip="Log into a framework account" mat-raised-button color="primary" routerLink="login"><mat-icon>login</mat-icon>Sign In</button>
+        <span style="flex: 0.05 auto"></span>
+        <button matTooltip="Sign up a framework account" mat-raised-button style="background-color: #8B8000" routerLink="/signup"><mat-icon>health_and_safety</mat-icon>Sign Up</button>
+      </div>
+    </div>
+    <div *ngIf = "this.auth.user != null">
+      <p>You are authenticated as: </p><p [matTooltip]="this.auth.user?.uid">{{this.auth.user?.displayName}} [{{this.auth.user?.email}}]</p>
+      <br/>
+      <div style="display: flex; flex-direction: row; align-content: center!important; justify-content: center!important;">
+        <button matTooltip="Access realtime datafeed and manipulation panel" mat-raised-button color="primary" routerLink="/dashboard"><mat-icon>dashboard</mat-icon>Dashboard</button>
+        <span style="flex: 0.05 auto"></span>
+        <button matTooltip="Account Settings and Security" mat-raised-button style="background-color: #546DA6" routerLink="/settings"><mat-icon>settings</mat-icon>Settings</button>
+        <span style="flex: 0.05 auto"></span>
+        <button matTooltip="Log out of the current session" mat-raised-button color="warn" (click)="this.auth.signOut()"><mat-icon>logout</mat-icon>Sign Out</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,4 +1,59 @@
 <app-navigationbar></app-navigationbar>
+<div class="dashboard-container">
+  <!-- Main Content Area -->
+  <mat-card class="main-card">
+    <mat-card-header>
+      <mat-card-title>Dashboard Overview</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="main-content">
+        <!-- User Profile Section -->
+        <div class="user-profile">
+          <img [src]="this._auth.user?.photoURL != '' ? this._auth.user?.photoURL : 'assets/profile-picture.png'" alt="Profile Picture" class="profile-picture">
+          <div class="profile-details">
+            <h2>{{ this._auth.user?.displayName }}</h2>
+            <p><strong>Joined Date:</strong> {{ this._auth.user?.metadata.creationTime | date: 'medium' }}</p>
+            <p><strong>Ranks:</strong> {{ this._auth.user?.ranks.length != 0 ? this._auth.user?.ranks.join(', ') : 'None'}}</p>
+            <p><strong>Badges:</strong></p>
+            <mat-icon *ngFor="let badge of this._auth.user?.badges" class="badge-icon">{{ badge }}</mat-icon>
+            <p *ngIf="this._auth.user?.badges.length == 0">None</p>
+            <p>Web Developer | Explorer | Coffee Enthusiast</p>
+          </div>
+        </div>
+
+        <h2>Friends</h2>
+        <mat-list>
+          <mat-list-item *ngFor="let friend of friends">
+            <img style="width: 30px; height: 30px" src="{{ friend.avatar }}" alt="Friend Avatar">
+            <br/>
+            <div class="friend-details">
+              <h4 mat-line>{{ friend.name }}</h4>
+              <p mat-line class="friend-bio">{{ friend.bio }}</p>
+            </div>
+          </mat-list-item>
+        </mat-list>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Notifications Sidebar -->
+  <mat-card class="notifications-card">
+    <mat-card-header>
+      <mat-card-title>Notifications</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-list>
+        <mat-list-item *ngFor="let notification of notifications">
+          <div mat-list-avatar><mat-icon>{{ notification.icon }}</mat-icon></div>
+          <div class="notification-details">
+            <h4 mat-line>{{ notification.message }}</h4>
+            <p mat-line class="notification-time">{{ notification.timestamp | date: 'shortTime' }}</p>
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<br/>
 <div *ngIf="this._auth.user && this._auth.user.uid == '3CSq75BgQ7VQga27d5ms4rtIu342'">
   Hello Dad
   <br/>

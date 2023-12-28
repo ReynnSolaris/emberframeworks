@@ -28,6 +28,10 @@ import { VerifyComponent } from './email/verify/verify.component';
 import {MatStepperModule} from "@angular/material/stepper";
 import {MatDividerModule} from "@angular/material/divider";
 import { ResendComponent } from './email/resend/resend.component';
+import {MatSidenavModule} from "@angular/material/sidenav";
+import {MatListModule} from "@angular/material/list";
+import {MatGridListModule} from "@angular/material/grid-list";
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +41,8 @@ import { ResendComponent } from './email/resend/resend.component';
     DashboardComponent,
     SignupComponent,
     VerifyComponent,
-    ResendComponent
+    ResendComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -60,7 +65,10 @@ import { ResendComponent } from './email/resend/resend.component';
     MatProgressSpinnerModule,
     MatTooltipModule,
     MatStepperModule,
-    MatDividerModule
+    MatDividerModule,
+    MatSidenavModule,
+    MatListModule,
+    MatGridListModule
   ],
   providers: [
     provideClientHydration(),

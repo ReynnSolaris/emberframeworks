@@ -25,6 +25,12 @@ export class FirebaseIntegrationService {
     }
   }
 
+  private assignUser(user: User) {
+    this.user = user;
+    user["ranks"] = ['Gold', 'Silver', 'Bronze'];
+    user["badges"] = ['token', 'military_tech', this.user.emailVerified ? "verified_user" : 'gpp_bad'];
+  }
+
   constructor(private router: Router) {
     if (getApps().length === 0) {
       this.app = initializeApp(environment.firebaseConfig);
@@ -35,11 +41,12 @@ export class FirebaseIntegrationService {
     //signOut(this.auth).then(r => {});
     onAuthStateChanged(this.auth, (user) => {
       if (user) {
-        this.user = user;
+        // @ts-ignore
+        this.assignUser(user);
       } else {
         // User is signed out
         // ...
-        this.router.navigateByUrl("/login");
+        this.router.navigateByUrl("/");
       }
     });
   }
@@ -51,7 +58,8 @@ export class FirebaseIntegrationService {
         email,
         password
       ).then((userCredential) => {
-        this.user = userCredential.user;
+        // @ts-ignore
+        this.assignUser(userCredential.user);
         return "no-error";
       }).catch((error) => {
         return this.getResultMessage(error.code);
@@ -61,7 +69,8 @@ export class FirebaseIntegrationService {
 
   public async createUser(email: string, password: string) {
     return await createUserWithEmailAndPassword(this.auth, email, password).then((userCred) => {
-      this.user = userCred.user;
+      // @ts-ignore
+      this.assignUser(userCred.user);
       sendEmailVerification(userCred.user, {
         url:location.origin+"/email/verify",
       }).then((e)=> { })
@@ -104,7 +113,7 @@ export class FirebaseIntegrationService {
   public async signOut() {
     return await signOut(this.auth).then(() => {
       this.user = null;
-      this.router.navigateByUrl("/login")
+      this.router.navigateByUrl("/")
     });
   }
 }
