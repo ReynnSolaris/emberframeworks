@@ -1,26 +1,29 @@
-/* signup.component.css */
-
-form {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-mat-card {
-  max-width: 400px;
-  width: 100%;
-}
-
-.full-width {
-  width: 100%;
-}
-
-mat-card-actions {
-  display: flex;
-  justify-content: flex-end;
-}
-
-button {
+.mat-mdc-form-field {
   margin-top: 16px;
+  width: 100%;
+}
+
+.mat-stepper-horizontal {
+  margin-top: 8px;
+  width: 35%;
+}
+
+.signup {
+  top: 50%;
+  display: flex;
+  justify-content: center!important;
+  text-align: center!important;
+  align-content: center!important;
+  margin: auto;
+}
+.spacerF {
+  flex: 0.2 0.2 auto;
+}
+.buttonRow {
+  display: flex;
+  align-content: center!important;
+  margin: auto;
+  justify-content: center!important;
+  flex-direction: row;
+  padding: 12px
 }

@@ -1,53 +1,55 @@
-<form (ngSubmit)="onSubmit()" [formGroup]="signupForm">
-  <mat-card>
-    <mat-card-header style="justify-content: center!important; text-align: center!important;">
-      <h2>Sign Up</h2>
-    </mat-card-header>
-    <mat-divider></mat-divider>
-    <br/>
-    <mat-card-content>
-      <mat-form-field class="full-width">
-        <input matInput formControlName="displayName">
-        <mat-label>Display Name</mat-label>
-      </mat-form-field>
+<div class="signup">
+  <mat-stepper #stepper>
+    <mat-step [stepControl]="signupForm" errorMessage="Information still required.">
+      <form [formGroup]="signupForm">
+        <ng-template matStepLabel>Account Information</ng-template>
+        <mat-form-field>
+          <mat-label>Display Name</mat-label>
+          <input matInput placeholder="ExampleUsername" formControlName="displayName" required>
+          <mat-error *ngIf="signupForm.get('displayName').hasError('whitespace')">
+            There cannot be any spaces in your username.
+          </mat-error>
+        </mat-form-field>
+        <br/>
+        <mat-form-field class="full-width">
+          <input matInput type="email" formControlName="email">
+          <mat-label>Email</mat-label>
+          <mat-error *ngIf="signupForm.get('email').hasError('email') && signupForm.get('email').touched">
+            Invalid email address
+          </mat-error>
+        </mat-form-field>
+        <br/>
+        <mat-form-field class="full-width">
+          <input matInput type="password" formControlName="password">
+          <mat-label>Password</mat-label>
+          <mat-error *ngIf="signupForm.get('password').hasError('minlength') && signupForm.get('password').touched">
+            Password must be at least 6 characters long
+          </mat-error>
+        </mat-form-field>
+        <br/>
+        <mat-divider></mat-divider>
+        <br/>
+       <div class="buttonRow">
+         <button mat-raised-button routerLink="/" color="warn">Back</button>
+         <span class="spacerF"></span>
+         <button mat-raised-button matStepperNext color="primary">Next</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="signupForm_2" errorMessage="Information still required.">
+      <form [formGroup]="signupForm_2">
+        <ng-template matStepLabel>User Attributes</ng-template>
+        <mat-form-field class="full-width">
+          <textarea matInput formControlName="bio"></textarea>
+          <mat-label>Bio (Optional)</mat-label>
+        </mat-form-field>
 
-      <mat-form-field class="full-width">
-        <input matInput type="email" formControlName="email">
-        <mat-label>Email</mat-label>
-        <mat-error *ngIf="signupForm.get('email').hasError('email') && signupForm.get('email').touched">
-          Invalid email address
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field class="full-width">
-        <input matInput type="password" formControlName="password">
-        <mat-label>Password</mat-label>
-        <mat-error *ngIf="signupForm.get('password').hasError('minlength') && signupForm.get('password').touched">
-          Password must be at least 6 characters long
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field class="full-width">
-        <input matInput formControlName="location">
-        <mat-label>Location (Optional)</mat-label>
-      </mat-form-field>
-
-      <mat-form-field class="full-width">
-        <input matInput formControlName="interests">
-        <mat-label>Interests (Optional)</mat-label>
-      </mat-form-field>
-
-      <mat-form-field class="full-width">
-        <textarea matInput formControlName="bio"></textarea>
-        <mat-label>Bio (Optional)</mat-label>
-      </mat-form-field>
-    </mat-card-content>
-
-    <div style="display: flex; justify-content: center!important; align-content: center!important;">
-      <button mat-raised-button color="primary" type="submit" [disabled]="!signupForm.valid">Sign Up</button>
-      <span style="flex: 0.25 auto"></span>
-      <button mat-raised-button color="warn" routerLink="">Back</button>
-    </div>
-    <br/>
-  </mat-card>
-</form>
+        <div class="buttonRow">
+          <button mat-raised-button matStepperPrevious color="warn">Back</button>
+          <span class="spacerF"></span>
+          <button mat-raised-button [disabled]="!isValid()" (click)="onSubmit()" color="accent">Submit</button>
+        </div>
+      </form>
+    </mat-step>
+  </mat-stepper>
+</div>

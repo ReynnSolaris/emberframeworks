@@ -8,6 +8,8 @@ import {SignupComponent} from "./signup/signup.component";
 import {ResendComponent} from "./email/resend/resend.component";
 import {AuthGuard} from "./Guards/Auth.guard";
 import {HomeComponent} from "./home/home.component";
+import {AccountSettingsComponent} from "./account-settings/account-settings.component";
+import {CreatedComponent} from "./email/created/created.component";
 
 const routes: Routes = [
   //Authentication
@@ -25,6 +27,11 @@ const routes: Routes = [
     component: DashboardComponent,
     canActivate: [AuthGuard],
   },
+  {
+    path: 'settings',
+    component: AccountSettingsComponent,
+    canActivate: [AuthGuard]
+  },
   // Email
   {
     path: 'email/verify',
@@ -34,6 +41,10 @@ const routes: Routes = [
     path: 'email/resend',
     component: ResendComponent,
     canActivate: [AuthGuard],
+  },
+  {
+    path: 'email/welcome',
+    component: CreatedComponent
   },
   // General
   {

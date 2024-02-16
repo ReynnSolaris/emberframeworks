@@ -32,6 +32,8 @@ import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatListModule} from "@angular/material/list";
 import {MatGridListModule} from "@angular/material/grid-list";
 import { HomeComponent } from './home/home.component';
+import { AccountSettingsComponent } from './account-settings/account-settings.component';
+import { CreatedComponent } from './email/created/created.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,9 @@ import { HomeComponent } from './home/home.component';
     SignupComponent,
     VerifyComponent,
     ResendComponent,
-    HomeComponent
+    HomeComponent,
+    AccountSettingsComponent,
+    CreatedComponent
   ],
   imports: [
     BrowserModule,

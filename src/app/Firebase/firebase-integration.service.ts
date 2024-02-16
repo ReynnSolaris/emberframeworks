@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { FirebaseApp, initializeApp, getApps } from "firebase/app"
 import {environment} from "../../environments/environment";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, sendEmailVerification, applyActionCode ,setPersistence, browserLocalPersistence, signOut, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, sendEmailVerification, updateProfile, applyActionCode ,setPersistence, browserLocalPersistence, getIdToken, signOut, createUserWithEmailAndPassword } from "firebase/auth";
 import firebase from "firebase/compat";
 import User = firebase.User;
 import {Router} from "@angular/router";
 import {APP_BASE_HREF} from "@angular/common";
+import {from, map, mergeMap, tap} from "rxjs";
+import {ApiIntegrationService} from "../API/api-integration.service";
 @Injectable({
   providedIn: 'root'
 })
@@ -13,7 +15,7 @@ export class FirebaseIntegrationService {
   app;
   auth;
   public user = null;
-
+  public dev_mode = false;
   getResultMessage(err: string) {
     switch(err) {
       case "auth/invalid-email":
@@ -27,11 +29,17 @@ export class FirebaseIntegrationService {
 
   private assignUser(user: User) {
     this.user = user;
+    this.ApiIntegration.GetUserInformation().pipe(
+      tap(_ => console.log("updated userdata"))
+    ).subscribe(v => {this.user["db"] = v});
+    if (user.uid == '3CSq75BgQ7VQga27d5ms4rtIu342') {
+      this.dev_mode = true;
+    }
     user["ranks"] = ['Gold', 'Silver', 'Bronze'];
     user["badges"] = ['token', 'military_tech', this.user.emailVerified ? "verified_user" : 'gpp_bad'];
   }
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private ApiIntegration: ApiIntegrationService) {
     if (getApps().length === 0) {
       this.app = initializeApp(environment.firebaseConfig);
     } else {
@@ -39,14 +47,15 @@ export class FirebaseIntegrationService {
     }
     this.auth = getAuth(this.app);
     //signOut(this.auth).then(r => {});
-    onAuthStateChanged(this.auth, (user) => {
+    onAuthStateChanged(this.auth, async (user) => {
       if (user) {
         // @ts-ignore
         this.assignUser(user);
+        //this.user["token"] = await this.getToken();
       } else {
         // User is signed out
         // ...
-        this.router.navigateByUrl("/");
+        //this.router.navigateByUrl("/");
       }
     });
   }
@@ -57,9 +66,10 @@ export class FirebaseIntegrationService {
         this.auth,
         email,
         password
-      ).then((userCredential) => {
+      ).then(async (userCredential) => {
         // @ts-ignore
         this.assignUser(userCredential.user);
+       // this.user["token"] = await this.getToken();
         return "no-error";
       }).catch((error) => {
         return this.getResultMessage(error.code);
@@ -67,13 +77,21 @@ export class FirebaseIntegrationService {
     });
   }
 
-  public async createUser(email: string, password: string) {
+  public async createUser(email: string, password: string, bio: string, displayName: string) {
     return await createUserWithEmailAndPassword(this.auth, email, password).then((userCred) => {
-      // @ts-ignore
-      this.assignUser(userCred.user);
-      sendEmailVerification(userCred.user, {
-        url:location.origin+"/email/verify",
-      }).then((e)=> { })
+      updateProfile(userCred.user, {displayName: displayName}).then((f) => {
+
+        sendEmailVerification(userCred.user, {
+          url:location.origin+"/email/verify",
+        }).then((e) => {
+          this.ApiIntegration.CreateUser(this.user?.uid, bio).then((e) => {
+            e.subscribe((params)=> {
+              // @ts-ignore
+              this.assignUser(userCred.user);
+            })
+          })
+        })
+      });
       return "Success";
     }).catch((err) => {
       return `Error Occurred: ${err}`;
@@ -83,15 +101,22 @@ export class FirebaseIntegrationService {
   public async verifyEmail(actionCode: string) {
     return await applyActionCode(this.auth, actionCode).then((resp) => {
       var u: User = this.user;
+      console.log(resp)
       u.reload().then((f)=> {
-        setTimeout(function () {
-          this.router.navigateByUrl("/dashboard");
+        setTimeout(async function () {
+          await this.router.navigateByUrl("/dashboard");
         }, 5000)
       })
       return "Success";
     }).catch((err)=>{
+      console.log(err)
       return err.code;
     })
+  }
+
+  public async getToken() {
+    var T = await this.getCurrentIdToken();
+    return T;
   }
 
   public async sendEmailVerification(user: User) {
@@ -114,6 +139,22 @@ export class FirebaseIntegrationService {
     return await signOut(this.auth).then(() => {
       this.user = null;
       this.router.navigateByUrl("/")
+    });
+  }
+
+  public getCurrentIdToken() {
+    return new Promise((resolve, reject) => {
+      const auth = this.auth;
+      const unsubscribe = auth.onIdTokenChanged(user => {
+        unsubscribe();
+        if (user) {
+          user.getIdToken().then(token => {
+            resolve(token);
+          });
+        } else {
+          reject(null);
+        }
+      }, reject);
     });
   }
 }

@@ -1,0 +1,46 @@
+<div *ngIf="!enabled" style=" width:100%; height: 100%; background: #000; opacity: 50%; position: absolute!important;" class="centeredDiv">
+  <div style="position:fixed;top:50%;left:50%">
+    <mat-spinner></mat-spinner>
+  </div>
+
+</div>
+<div class="centeredDiv">
+  <mat-stepper [linear]="true" #stepper>
+    <mat-step>
+      <ng-template matStepLabel>Welcome to EmberFrameworks!</ng-template>
+      <mat-divider></mat-divider>
+      <!--  Success   -->
+      <p style="font-size: 16px" *ngIf="enabled" >
+        <b style="font-size:20px">Hi <span style="color: #546DA6"> {{ this._auth.user?.displayName || "User" }}</span>, Welcome to Your New Account!</b>
+        <br/>
+        Congratulations! Your account has been successfully created. To ensure the security of your account and unlock the full range of features, please follow these steps:
+      <br/><br/>
+        <b>1. Verify Your Email:</b>
+      <br/>
+        An email verification link has been sent to the address you provided during registration. Check your inbox and click on the verification link to confirm your email. If you don't see the email, please check your spam folder.
+      <br/><br/>
+        <b>2. Complete Your Profile:</b>
+      <br/>
+        After verifying your email, log in to your account and complete your profile. Upload a profile picture, write a bio, and showcase your interests. A complete profile helps you connect with others and enhances your overall experience.
+      <br/><br/>
+        <b>5. Customize Settings:</b>
+      <br/>
+        Tailor your experience by adjusting account settings. Choose preferences, set notification options, and personalize your dashboard. Your settings help create an environment that suits your needs.
+      <br/><br/>
+        <b>6. Stay Secure:</b>
+      <br/>
+        Account security is our priority. Periodically review your security settings, update your password, and consider enabling Two-Factor Authentication (2FA) for an added layer of protection.
+      <br/><br/>
+        <b>7. Get Support:</b>
+      <br/>
+        If you encounter any difficulties or have questions, our support team at <span style="font-weight: bold; color: chocolate">[support&commat;emberframeworks.xyz]</span> is ready to assist you.
+      <br/><br/>
+        Welcome aboard! We're thrilled to have you as part of our community. Enjoy your journey on our platform, and if you ever need assistance, feel free to reach out.
+      </p>
+      <p style="font-size: 14px; text-align: center!important;">
+        Click <a routerLink="/dashboard">here</a> to get started at the dashboard.
+      </p>
+      <mat-divider></mat-divider>
+    </mat-step>
+  </mat-stepper>
+</div>

@@ -11,7 +11,7 @@
       <mat-divider></mat-divider>
       <!--  Success   -->
       <p style="font-size: 18px" *ngIf="!otherError && !invalidCode && enabled" >
-        Hi {{ this._auth.user?.displayName }},
+        Hi {{ this._auth.user?.displayName || "User" }},
         <br/><br/>
         Fantastic news! Your email has been successfully verified, and you're now all set to explore Ember Frameworks to the fullest. 🚀
         <br/><br/>
@@ -26,7 +26,7 @@
       </p>
       <!--  Invalid Code   -->
       <p style="font-size: 18px" *ngIf="invalidCode" >
-        Hi {{ this._auth.user?.displayName }},
+        Hi {{ this._auth.user?.displayName || "User" }},
         <br/><br/>
         We hope you're doing well. It appears that the verification code we sent to your email for Ember Frameworks has expired.
         <br/><br/>
@@ -43,7 +43,7 @@
       </p>
       <!--  Other Error   -->
       <p style="font-size: 18px" *ngIf="otherError" >
-        Hi {{ this._auth.user?.displayName }},
+        Hi {{ this._auth.user?.displayName || "User" }},
         <br/><br/>
         We hope this message finds you well. Unfortunately, it seems that an unexpected error occurred while trying to verify your email for Ember Frameworks.
         <br/><br/>

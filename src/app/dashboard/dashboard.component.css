@@ -1,9 +1,6 @@
-/* app.component.css */
-
 :host {
   display: block;
 }
-
 
 .dashboard-container {
   display: flex;
@@ -17,21 +14,42 @@
 .main-card {
   width: 35%;
   margin-right: 16px;
+  border-radius: 5%;
   overflow: hidden;
 }
 
 .user-profile {
   text-align: center;
   padding: 16px;
-  border: 2px solid #ccc; /* Add a border */
-  border-radius: 8px; /* Add border radius for rounded corners */
+  overflow: hidden; /* Hide overflow for circular shape */
+  position: relative;
+}
+
+.profile-picture-container {
+  position: relative;
+  width: 150px;
+  height: 150px;
+}
+
+.profile-background {
+  width: 100%; /* Adjust the width based on your requirements */
+  height: 100%; /* Adjust the height based on your requirements */
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1; /* Move the background image to the back */
 }
 
 .profile-picture {
-  width: 100px;
-  height: 100px;
+  width: 80%; /* Adjust the width and height based on your requirements */
+  height: 80%;
+  object-fit: cover;
   border-radius: 50%;
-  margin-bottom: 10px;
+  /*padding-top: 10%;*/
+  margin-top: 10%;
+  border: solid black 1.5px;
+  z-index: 0; /* Move the profile picture to the front */
 }
 
 .profile-details {
@@ -40,6 +58,7 @@
 
 .notifications-card {
   flex: 0 0 30%;
+  border-radius: 5%;
   max-width: 30%;
 }
 

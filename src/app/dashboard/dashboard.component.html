@@ -1,26 +1,41 @@
 <app-navigationbar></app-navigationbar>
 <div class="dashboard-container">
   <!-- Main Content Area -->
-  <mat-card class="main-card">
-    <mat-card-header>
-      <mat-card-title>Dashboard Overview</mat-card-title>
-    </mat-card-header>
-    <mat-card-content class="main-content">
+  <div style="display: flex; margin: auto">
+    <mat-card class="main-card">
+      <mat-card-header>
+        <mat-card-title>Dashboard Overview</mat-card-title>
+      </mat-card-header>
+
+
+      <mat-card-content class="main-content">
         <!-- User Profile Section -->
         <div class="user-profile">
-          <img [src]="this._auth.user?.photoURL != '' ? this._auth.user?.photoURL : 'assets/profile-picture.png'" alt="Profile Picture" class="profile-picture">
+          <div style="margin: auto; display:flex; justify-content: center!important; align-content: center!important;">
+            <div class="profile-picture-container">
+              <img class="profile-background" src="/assets/Borders/admin_border.png" alt="Background" />
+              <img class="profile-picture" [src]="this._auth.user?.photoURL !== null && this._auth.user?.photoURL !== '' ? this._auth.user?.photoURL : 'assets/profile-picture.png'" alt="Profile" />
+            </div>
+          </div>
           <div class="profile-details">
             <h2>{{ this._auth.user?.displayName }}</h2>
             <p><strong>Joined Date:</strong> {{ this._auth.user?.metadata.creationTime | date: 'medium' }}</p>
             <p><strong>Ranks:</strong> {{ this._auth.user?.ranks.length != 0 ? this._auth.user?.ranks.join(', ') : 'None'}}</p>
             <p><strong>Badges:</strong></p>
             <mat-icon *ngFor="let badge of this._auth.user?.badges" class="badge-icon">{{ badge }}</mat-icon>
+            <p><strong>Biography:</strong></p>
             <p *ngIf="this._auth.user?.badges.length == 0">None</p>
-            <p>Web Developer | Explorer | Coffee Enthusiast</p>
+            <p>{{ this._auth.user?.db?.biography }}</p>
           </div>
         </div>
-
-        <h2>Friends</h2>
+      </mat-card-content>
+    </mat-card>
+    <br/>
+    <mat-card class="main-card">
+      <mat-card-header>
+        <mat-card-title>Friends</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="main-content">
         <mat-list>
           <mat-list-item *ngFor="let friend of friends">
             <img style="width: 30px; height: 30px" src="{{ friend.avatar }}" alt="Friend Avatar">
@@ -31,8 +46,9 @@
             </div>
           </mat-list-item>
         </mat-list>
-    </mat-card-content>
-  </mat-card>
+      </mat-card-content>
+    </mat-card>
+  </div>
 
   <!-- Notifications Sidebar -->
   <mat-card class="notifications-card">

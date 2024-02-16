@@ -24,7 +24,7 @@ export class AuthGateInterceptor implements HttpInterceptor {
       }
     })
     if (req.url.match("/client-api/")) {
-      return from(this.getCurrentIdToken()).pipe(
+      return from(this.Firebase.getCurrentIdToken()).pipe(
 
         mergeMap(token => {
           if (token) {
@@ -42,19 +42,5 @@ export class AuthGateInterceptor implements HttpInterceptor {
     return next.handle(req);
   }
 
-  getCurrentIdToken() {
-    return new Promise((resolve, reject) => {
-      const auth = this.Firebase.auth;
-      const unsubscribe = auth.onIdTokenChanged(user => {
-        unsubscribe();
-        if (user) {
-          user.getIdToken().then(token => {
-            resolve(token);
-          });
-        } else {
-          reject(null);
-        }
-      }, reject);
-    });
-  }
+
 }

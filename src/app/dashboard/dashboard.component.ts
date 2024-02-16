@@ -1,14 +1,14 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FirebaseIntegrationService} from "../Firebase/firebase-integration.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
-
+import { AdminRealTimeService } from '../services/Socket/admin-real-time.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
 
   friends = [
     {
@@ -38,7 +38,7 @@ export class DashboardComponent {
     },
     // Add more notifications as needed
   ];
-  constructor(public _auth: FirebaseIntegrationService, private router: Router, private matDialog: MatDialog) {
+  constructor(private adminRealTimeService: AdminRealTimeService, public _auth: FirebaseIntegrationService, private router: Router, private matDialog: MatDialog) {
     const navigation = this.router.getCurrentNavigation();
     var st = navigation.extras.state;
     if (st != null) {
@@ -48,6 +48,13 @@ export class DashboardComponent {
         }
       }
     }
+    this.adminRealTimeService.getAdminUpdates().subscribe(data => {
+      console.log('Received update:', data);
+    });
+  }
+
+  ngOnInit() {
+
   }
 
   async sendEmailVerification() {

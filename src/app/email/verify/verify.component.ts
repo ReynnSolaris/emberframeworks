@@ -12,6 +12,9 @@ export class VerifyComponent implements OnInit {
   otherError = false;
   enabled = false;
   constructor(public _auth: FirebaseIntegrationService, public router: Router, private activatedRouter: ActivatedRoute) {
+  }
+
+  ngOnInit() {
     var oobCode = this.activatedRouter.snapshot.queryParamMap.get('oobCode');
     var action = this.activatedRouter.snapshot.queryParamMap.get('mode');
     if (oobCode==null || action==null) {
@@ -20,25 +23,21 @@ export class VerifyComponent implements OnInit {
     switch (action) {
       case "verifyEmail":
         var r = this._auth.verifyEmail(oobCode).then((b) => {
+          console.log(r)
           if (b == "Success") {
-
           } else if (b == "auth/invalid-action-code") {
             this.invalidCode = true;
           } else {
             this.otherError = true;
           }
+          setTimeout(()=> {
+            this.router.navigateByUrl("/dashboard")
+          }, 10000)
         });
         break;
       default:
         break;
     }
-    setTimeout(()=> {
-      this.router.navigateByUrl("/dashboard")
-    }, 10000)
     this.enabled = true;
-  }
-
-  ngOnInit() {
-
   }
 }

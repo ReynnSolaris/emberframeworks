@@ -1,0 +1,120 @@
+<app-navigationbar></app-navigationbar>
+<!-- account-settings.component.html -->
+<div class="settings-container">
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Account Settings</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <!-- User Details Section -->
+    <div class="settings-section">
+      <h3>Edit Profile</h3>
+      <form [formGroup]="settingsForm">
+        <div class="avatar-section">
+          <div class="current-avatar" *ngIf="userDetails.controls['avatarUrl']">
+            <img [src]="getUserProfilePic()" alt="Current Avatar">
+          </div>
+          <div class="custom-file-upload">
+            <label for="avatarFile" >
+              <mat-icon>file_upload</mat-icon>
+              Upload Avatar
+            </label>
+            <br/>
+            <input type="file"  id="avatarFile" (change)="onAvatarChange($event)" accept="image/*">
+          </div>
+
+        </div>
+
+        <mat-form-field >
+          <textarea matInput [formControl]="userDetails.controls.bio" placeholder="Bio"></textarea>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Badges</mat-label>
+          <mat-select [formControl]="userDetails.controls.selectedBadges" multiple>
+            @for (badge of badges; track badge) {
+              <mat-option [value]="badge">
+                {{badge}}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Awards</mat-label>
+          <mat-select [formControl]="userDetails.controls.selectedAwards" multiple>
+            @for (award of awards; track award) {
+              <mat-option [value]="award">
+                {{award}}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" (click)="saveUserDetails()">Save Changes</button>
+      </form>
+    </div>
+  </mat-card-content>
+</mat-card>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Integrations</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="settings-section">
+        <h3>Discord Verification</h3>
+        <div class="discord-section">
+          <label>This section allows you to verify your Discord account.</label>
+          <button mat-raised-button color="primary" (click)="verifyDiscordLink()">Verify Discord</button>
+          <span class="verification-status">{{ userDetails.controls['discordLink'] ? 'Verified' : 'Not Verified' }}</span>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Security & Privacy</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <!-- Security Section -->
+      <div class="settings-section">
+        <h3>Security</h3>
+        <form>
+          <mat-form-field>
+            <input matInput type="password" placeholder="Current Password" [ngModelOptions]="{standalone: true}" [(ngModel)]="security.currentPassword">
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput type="password" placeholder="New Password" [ngModelOptions]="{standalone: true}" [(ngModel)]="security.newPassword">
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput type="password" placeholder="Confirm New Password" [ngModelOptions]="{standalone: true}" [(ngModel)]="security.confirmPassword">
+          </mat-form-field>
+
+          <button mat-raised-button color="primary" (click)="saveSecurityChanges()">Save Changes</button>
+        </form>
+      </div>
+      <!-- Privacy Section -->
+      <div class="settings-section">
+        <h3>Privacy</h3>
+        <form>
+          <!-- Add privacy-related input fields here -->
+
+          <button mat-raised-button color="primary" (click)="savePrivacyChanges()">Save Changes</button>
+        </form>
+      </div>
+
+      <!-- Two-Factor Authentication (2FA) Section -->
+      <div class="settings-section">
+        <h3>Two-Factor Authentication (2FA)</h3>
+        <form>
+          <!-- Add 2FA-related input fields here -->
+
+          <button mat-raised-button color="primary" (click)="save2FAChanges()">Save Changes</button>
+        </form>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
