@@ -48,9 +48,11 @@ export class DashboardComponent implements OnInit {
         }
       }
     }
+    /*
     this.adminRealTimeService.getAdminUpdates().subscribe(data => {
       console.log('Received update:', data);
     });
+     */
   }
 
   ngOnInit() {

@@ -13,16 +13,16 @@ export class ApiIntegrationService {
   }
 
   public CheckAuth(): Observable<boolean> {
-    return this.httpClient.get<boolean>(`/client-api/Auth/Verification`);
+    return this.httpClient.get<boolean>(`${environment.API_Endpoint}/Auth/Verification`);
   }
 
   public GetUserInformation() {
-    return this.httpClient.get<User>(`/client-api/User/GetInformation`);
+    return this.httpClient.get<User>(`${environment.API_Endpoint}/User/GetInformation`);
   }
 
 
   async CreateUser(uid: any, bio: any) {
-    return this.httpClient.post(`/client-api/User/Registration`, {
+    return this.httpClient.post(`${environment.API_Endpoint}/User/Registration`, {
       biography: bio
     })
   }

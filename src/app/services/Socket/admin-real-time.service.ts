@@ -12,8 +12,8 @@ export class AdminRealTimeService implements OnInit, OnDestroy {
 
   constructor() {
     console.log('Initializing socket...');
-    this.socket = io('/websocket', {withCredentials: true});
-    console.log('Socket initialized:', this.socket);
+    //this.socket = io('/websocket', {withCredentials: true});
+    console.log('Socket not-initialized:', this.socket);
   }
 
   ngOnInit(): void {

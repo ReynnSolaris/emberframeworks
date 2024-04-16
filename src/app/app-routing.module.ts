@@ -34,16 +34,16 @@ const routes: Routes = [
   },
   // Email
   {
-    path: 'email/verify',
+    path: 'emailverify',
     component: VerifyComponent,
   },
   {
-    path: 'email/resend',
+    path: 'emailresend',
     component: ResendComponent,
     canActivate: [AuthGuard],
   },
   {
-    path: 'email/welcome',
+    path: 'emailwelcome',
     component: CreatedComponent
   },
   // General

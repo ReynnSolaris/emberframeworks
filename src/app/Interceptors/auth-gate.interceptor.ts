@@ -20,17 +20,17 @@ export class AuthGateInterceptor implements HttpInterceptor {
       setHeaders : {
         "Content-Type": "application/json",
         "Accept": "*",
-        "Access-Control-Allow-Origin": 'http://localhost:4200,https://management.emberframeworks.xyz',
+        //"Access-Control-Allow-Origin": 'http://localhost:4200,https://management.emberframeworks.xyz,https://api.emberframeworks.xyz,https://emberframeworks.xyz',
       }
     })
-    if (req.url.match("/client-api/")) {
+    if (req.url.match(`${environment.API_Endpoint}`)) {
       return from(this.Firebase.getCurrentIdToken()).pipe(
 
         mergeMap(token => {
           if (token) {
             req = req.clone({
               setHeaders: {
-                "ID_TOKEN": `${token}`,
+                "ID-TOKEN": `${token}`,
                 "UID": this.Firebase.auth.currentUser != null ? this.Firebase.auth.currentUser.uid : ""
               }
             });

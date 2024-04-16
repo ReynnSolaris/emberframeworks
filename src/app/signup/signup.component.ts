@@ -45,7 +45,7 @@ export class SignupComponent {
       // Handle form submission logic here
       var success = await this._auth.createUser(this.signupForm.controls["email"]?.value || "", this.signupForm.controls["password"]?.value || "", this.signupForm_2.controls['bio'].value || "", this.signupForm.controls['displayName'].value || "")
       if (success == "Success") {
-        await this.router.navigateByUrl("/email/welcome")
+        await this.router.navigateByUrl("/emailwelcome")
       } else {
         //Error
       }
