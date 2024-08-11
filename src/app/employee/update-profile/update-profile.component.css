@@ -1,0 +1,23 @@
+.update-profile-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  .mat-card {
+    padding: 16px;
+  }
+  
+  .profile-contacts, .profile-address, .profile-phone {
+    margin-top: 20px;
+  }
+  
+  table {
+    width: 100%;
+  }
+  
+  .mat-form-field {
+    width: 100%;
+  }
+  

@@ -1,0 +1,91 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+
+  .header {
+    display: flex;
+    flex-direction: column;
+    text-align: center!important;
+    margin-bottom: 40px;
+    justify-content: center!important;
+    align-items: center!important;
+  }
+
+  .card {
+    max-width: 500px;
+  }
+  
+  .logo-container {
+    position: relative;
+    width: calc(50% - 20px);
+    margin-bottom: 20px;
+  }
+  
+  .logo {
+    max-width: 80%;
+    height: auto;
+  }
+  
+  .content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+  
+  .portfolio,
+  .customer-reviews,
+  .company-info {
+    width: calc(50% - 20px);
+  }
+  
+  .portfolio h2,
+  .customer-reviews h2,
+  .company-info h2 {
+    margin-bottom: 20px;
+  }
+  
+  .portfolio-item {
+    margin-bottom: 20px;
+  }
+  
+  .portfolio-item img {
+    max-width: 100%;
+  }
+  
+  
+  .team {
+    margin-top: auto; 
+    text-align: center;
+  }
+  
+  .team h2 {
+    margin-bottom: 20px;
+  }
+  
+  .team-container {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .team-member {
+    margin: 10px;
+  }
+  
+  .team-member .card {
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .team-member img {
+    width: 125px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+  }
+  

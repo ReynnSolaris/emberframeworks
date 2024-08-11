@@ -1,0 +1,42 @@
+<div class="profile-details-container">
+    <mat-accordion>
+      <!-- User Settings Expansion Panel -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            User Settings
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="settings-content">
+          <button mat-button (click)="goTo('employee/profile/change-password')">Change Password</button>
+          <button mat-button (click)="goTo('employee/profile/update')">Update Profile</button>
+        </div>
+      </mat-expansion-panel>
+  
+      <!-- Admin Settings Expansion Panel -->
+      <mat-expansion-panel *ngIf = "this.authService.employeeInfo.permissions.indexOf('Manager') > -1">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Admin Settings
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="settings-content">
+          <button mat-button>Manage User</button>
+          <button mat-button>View Logs</button>
+        </div>
+      </mat-expansion-panel>
+  
+      <!-- HR Settings Expansion Panel -->
+      <mat-expansion-panel *ngIf = "this.authService.employeeInfo.permissions.indexOf('HR') > -1">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            HR Settings
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="settings-content">
+          <button mat-button>View Payroll</button>
+          <button mat-button>Employee Records</button>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>

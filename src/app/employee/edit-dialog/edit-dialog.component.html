@@ -1,0 +1,33 @@
+<h1 mat-dialog-title>{{ isEditMode ? 'Edit' : 'Add' }}</h1>
+<div mat-dialog-content>
+  <form [formGroup]="editForm">
+    <ng-container *ngIf="data.fullName !== undefined">
+      <mat-form-field appearance="fill">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="fullName">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Phone Number</mat-label>
+        <input matInput formControlName="phone">
+      </mat-form-field>
+    </ng-container>
+    
+    <ng-container *ngIf="data.address !== undefined">
+      <mat-form-field appearance="fill">
+        <mat-label>Address</mat-label>
+        <input matInput formControlName="address">
+      </mat-form-field>
+    </ng-container>
+    
+    <ng-container *ngIf="data.phoneNumber !== undefined">
+      <mat-form-field appearance="fill">
+        <mat-label>Phone Number</mat-label>
+        <input matInput formControlName="phoneNumber">
+      </mat-form-field>
+    </ng-container>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-button color="primary" (click)="onSave()">{{ isEditMode ? 'Save' : 'Add' }}</button>
+</div>

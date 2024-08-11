@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>Contact Form Submission</h2>
+<mat-dialog-content>
+    <b>
+        @if (data.errored) {
+            Error!
+        }
+        @if (!data.errored) {
+            Success!
+        }
+    </b>
+  <br/>
+  {{data.message}}
+</mat-dialog-content>

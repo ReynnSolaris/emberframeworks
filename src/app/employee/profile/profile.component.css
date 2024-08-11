@@ -1,0 +1,102 @@
+/* src/app/dashboard/dashboard.component.css */
+.dashboard-container {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    background-color: #1e1e1e;
+    color: #eee;
+  }
+  
+  .profile-details-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 500px;
+    width: 50%; /* Adjust width as needed */
+  }
+  
+  .employee-profile, .employee-details {
+    background-color: #333;
+    color: #eee;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .mat-mdc-chip-set {
+    max-width: 200px;
+  }
+  
+  .mat-custom1 {
+    background-color: darkgreen!important;
+    color:#444!important;
+  }
+
+  .mat-custom2 {
+    background-color: darkred!important;
+    color:#444!important;
+  }
+
+  .mat-custom3 {
+    background-color: rosybrown!important;
+    color: #444!important
+  }
+
+  .mat-primary {
+    background-color: darkgoldenrod!important;
+    color:#444!important;
+  }
+
+  .mat-accent {
+    background-color: darkcyan!important;
+    color:#444!important;
+  }
+
+  .mat-warn {
+    background-color: rebeccapurple!important;
+    color:#444!important;
+  }
+
+  .employee-profile {
+    text-align: center;
+  }
+  
+  .employee-profile img {
+    max-width: 100%;
+    border-bottom: 1px solid #444;
+  }
+  
+  .employee-details {
+    padding: 20px;
+  }
+  
+  .mat-card-title {
+    margin-bottom: 16px;
+    color: #fff;
+  }
+  
+  .details-row {
+    margin-bottom: 10px;
+  }
+  
+  .system-announcer-calendar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 50%; /* Adjust width as needed */
+  }
+  
+  .system-announcer, .schedule {
+    background-color: #333;
+    color: #eee;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .system-announcer {
+    padding: 20px;
+  }
+  
+  .schedule {
+    padding: 20px;
+  }
+  

@@ -1,0 +1,38 @@
+.loading {
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    background-color: #000;
+    opacity: 50%;
+    z-index: 99;
+}
+
+.loading-inner {
+    margin: 40vh 0;
+}
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  mat-card {
+    width: 400px;
+  }
+
+  mat-card-header {
+    justify-content: center!important;
+    text-align: center!important;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column!important;
+  }
+  
+  button {
+    margin-top: 20px;
+  }

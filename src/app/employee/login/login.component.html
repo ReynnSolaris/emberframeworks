@@ -1,0 +1,36 @@
+<div *ngIf="signingIn" class="loading">
+    <div class="loading-inner">
+        <mat-spinner style="margin:auto auto;" ></mat-spinner>
+    </div>
+    
+</div>
+<div class="login-container">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Employee Login</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <mat-form-field appearance="fill">
+            <mat-label>Username</mat-label>
+            <input matInput formControlName="username" required>
+            <mat-error *ngIf="loginForm.get('username')?.hasError('required')">
+              Username is required
+            </mat-error>
+          </mat-form-field>
+  
+          <mat-form-field appearance="fill">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" formControlName="password" required>
+            <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+              Password is required
+            </mat-error>
+          </mat-form-field>
+  
+          <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">Login</button>
+        </form>
+        <br/>
+        <mat-error style="text-align: center!important;" *ngIf="errorMessage"><b style="font-size:large">[ ERROR ]</b><br/>{{ errorMessage }}<br/>This attempt has been logged.</mat-error>
+      </mat-card-content>
+    </mat-card>
+  </div>

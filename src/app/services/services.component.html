@@ -1,0 +1,45 @@
+<h1 style="text-align: center;">Our IT Services</h1>
+<div *ngIf="loading" style="align-items: center!important; margin:auto; justify-content: center!important; text-align: center; font-size: 32px; max-width: 400px;">
+    Loading..
+    <mat-progress-bar color="accent" mode="query"></mat-progress-bar>
+</div>
+<div *ngIf="!loading" class="fade-in" style="display: flex; flex-direction: row; max-width: 100%; justify-content: center; padding: auto; ">
+    <mat-card *ngFor="let category of categories" style="max-width: 400px; margin: 5px 5px;">
+        <mat-card-header style="justify-content: center!important; text-align: center!important;">
+            <mat-card-title>{{category?.CategoryName}} Category</mat-card-title>
+            <mat-card-subtitle style="text-align: center!important;">Product List</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <mat-list style="flex-direction: row;">
+                <mat-list-item lines="3" style="height: auto;" *ngFor = "let v of getList(category.CategoryId) index as f">
+                  <span matListItemTitle>{{v.Item?.itemData?.name}}</span>
+                
+                  <span matListItemLine>Price: &dollar;{{v.Price | number : '1.2-2'}}{{getMeasurement(v.Item?.id)}}</span>
+                  <span style="display: flex;" *ngIf="v.Description != undefined && v.Description.length != 0">Description:
+                      {{v.Description}}
+                  </span>
+                  <hr *ngIf="getList(category.CategoryId).length - 1 != f">
+                </mat-list-item>
+              </mat-list>
+        </mat-card-content>
+    </mat-card>
+    <mat-card style="max-width: 400px; margin: 5px 5px;">
+        <mat-card-header style="justify-content: center!important; text-align: center!important;">
+            <mat-card-title>Subscription(s)</mat-card-title>
+            <mat-card-subtitle style="text-align: center!important;">Product List</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <mat-list>
+                <mat-list-item lines="3" style="height: auto;" *ngFor = "let sub of subscriptions index as f">
+                  <span matListItemTitle>{{sub.SubscriptionName}}</span>
+                  
+                  <span matListItemLine>Price: &dollar;{{sub.ItemRef == 'INVALID' ? 0 : getItemPrice(sub.ItemRef)  | number : '1.2-2'}} / {{sub.BillingCycle}}</span>
+                  <span style="display: flex;" *ngIf="getItem(sub.ItemRef).Description != undefined && getItem(sub.ItemRef).Description.length != 0">Description:
+                      {{getItem(sub.ItemRef).Description}}
+                  </span>
+                  <hr *ngIf="subscriptions.length - 1 != f">
+                </mat-list-item>
+              </mat-list>
+        </mat-card-content>
+    </mat-card>
+</div>

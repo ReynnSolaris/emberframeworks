@@ -1,0 +1,32 @@
+<div *ngIf="sending" style="z-index: 100; display: block ; background-color: rgba(0, 0, 0, 0.5) ; position: absolute!important; width: 100%; height: 100%;  align-items: center!important; text-align: center!important; align-self: center!important; align-content: center!important;">
+    <span style="font-weight: bold; font-size: 48px;">Submitting...</span>
+    <mat-spinner style="margin:0 auto;" color="accent"></mat-spinner>
+    <div style="position: absolute; width: 100%; height: 100%; opacity: 50%;">
+    </div>
+</div>
+<div class="container fade-in">
+    <h2>Contact Us</h2>
+    <form [formGroup]="contactForm" (ngSubmit)="submitForm()">
+      <mat-form-field class="full-width">
+        <input matInput placeholder="Name" formControlName="name">
+        <mat-error *ngIf="contactForm.get('name')!.invalid && contactForm.get('name')!.touched">Name is required</mat-error>
+      </mat-form-field>
+  
+      <mat-form-field class="full-width">
+        <input matInput placeholder="Email" formControlName="email">
+        <mat-error *ngIf="contactForm.get('email')!.invalid && contactForm.get('email')!.touched">
+          Please enter a valid email address
+        </mat-error>
+      </mat-form-field>
+  
+      <mat-form-field class="full-width">
+        <textarea matInput placeholder="Message" formControlName="message" rows="4"></textarea>
+        <mat-error *ngIf="contactForm.get('message')!.invalid && contactForm.get('message')!.touched">
+          Message is required
+        </mat-error>
+      </mat-form-field>
+  
+      <button mat-raised-button color="primary" type="submit" [disabled]="contactForm.invalid">Submit</button>
+    </form>
+  </div>
+  

@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { AfterContentInit, Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from './auth.service';
+import { isDevMode } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +10,17 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'EmberFrameworksLLC';
+  devMode = false;
+  constructor(public router: Router, public authService: AuthService) {
+    if(isDevMode()) {
+        this.devMode = true;
+    }
+  }
+
+  goTo(path: string) {
+    this.router.navigate([path]).then(() => {
+        window.location.reload();
+      });
+  }
+
 }

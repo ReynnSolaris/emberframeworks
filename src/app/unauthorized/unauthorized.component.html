@@ -1,0 +1,20 @@
+<div class="unauthorized-container">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>403 - Unauthorized Access</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p><strong>Sorry, access to this page is restricted.</strong></p>
+        <p>
+          At EmberFrameworks LLC, we prioritize security and privacy. Unfortunately, your account does not have the necessary permissions to view this content. 
+        </p>
+        <p>If you believe this is a mistake, please contact our support team for assistance.</p>
+        <p style="font-size: large; font-weight: bold;">⚠️Error Details⚠️<br/><em style="color: crimson; font-weight: lighter; text-shadow: #f00 0px 0px 8px">{{ errorMsg }}</em></p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" routerLink="/">Return to Home</button>
+        <button mat-raised-button color="accent" routerLink="/contact">Contact Support</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+  

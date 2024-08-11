@@ -1,1 +1,26 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { 
+    margin: 0; 
+    font-family: Roboto, "Helvetica Neue", sans-serif;  
+}
+
+
+.dark-theme {
+    background-color: #121212;
+    color: #ffffff;
+  }
+
+  .fade-in {
+    animation: fadeInAnimation 1s ease-in-out forwards;
+  }
+  
+  @keyframes fadeInAnimation {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }

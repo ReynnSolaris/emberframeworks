@@ -40,3 +40,16 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+src/assets/
+src/assets/
+src/environments
+src/proxy.conf.json
+src/fullcalendar-custom.css
+src/favicon.ico
+src/site.webmanifest
+src/favicon-32x32.png
+src/favicon-16x16.png
+src/apple-touch-icon.png
+src/android-chrome-512x512.png
+src/android-chrome-192x192.png
+tsconfig.json

@@ -1,0 +1,104 @@
+<!-- src/app/dashboard/dashboard.component.html -->
+<div class="dashboard-container">
+    <!-- Employee Profile and Details Wrapper -->
+    <div class="profile-details-wrapper">
+      <!-- Employee Profile Card -->
+      <mat-card class="employee-profile">
+        <img mat-card-image [src]="GetEmployeeDetails().photoUrl" alt="Employee Photo">
+        <mat-card-content>
+          <h2>{{ GetEmployeeDetails().name }}</h2>
+          <div class="details-row">
+            Employee Role:
+            <mat-chip color="custom1">{{ GetEmployeeDetails().roleName }}</mat-chip>
+          </div>
+          <div class="details-row">
+            Employee Title:
+            <mat-chip color="custom1">{{ GetEmployeeDetails().title }}</mat-chip>
+          </div>
+          <div class="details-row">
+            Employee ID:
+            <mat-chip color="custom2">{{ GetEmployeeDetails().id }}</mat-chip>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      
+      <!-- Developer Mode Stuff -->
+      <mat-card *ngIf="isDev()">
+        <mat-card-title>Development Environment Information</mat-card-title>
+        <mat-card-content>
+            <b>Permissions: </b>{{this.GetEmployeeDetails().permissions | json}}
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Employee Details Card -->
+      <mat-card class="employee-details">
+        <mat-card-title>Employee Details</mat-card-title>
+        <mat-card-content>
+          <div class="details-row">
+            <strong>Address:</strong> 
+            <mat-chip-listbox [class]="this.GetEmployeeDetails().address == 'No address' ? '' : 'mat-mdc-chip-set-stacked'">
+                <mat-chip color="custom2" *ngIf="this.GetEmployeeDetails().address == 'No address'">No Address Listed</mat-chip>
+                <mat-chip color="primary" *ngIf="this.GetEmployeeDetails().address !== 'No address'">{{ GetEmployeeDetails().address }}</mat-chip>
+            </mat-chip-listbox>
+          </div>
+          <div class="details-row">
+            <strong>Emergency Contacts:</strong>
+            <mat-chip-listbox class="mat-mdc-chip-set-stacked" >
+              <mat-chip color="custom2" *ngIf="this.GetEmployeeDetails().emergencyContacts.length == 0">No Emergency Contacts Listed</mat-chip>
+              <mat-chip color="custom3" *ngFor="let contact of this.GetEmployeeDetails().emergencyContacts">{{ contact.fullName }} - {{contact.phone}}</mat-chip>
+            </mat-chip-listbox>
+          </div>
+          <div class="details-row" *ngIf = "this.GetEmployeeDetails().salary != 0.00">
+            <strong>Salary Pay-Rate:</strong>
+            <mat-chip-listbox >
+                <mat-chip color="accent">${{ GetEmployeeDetails().salary | number }}/yearly</mat-chip>
+                </mat-chip-listbox>
+            </div>
+            <div class="details-row" *ngIf = "this.GetEmployeeDetails().payRate != 0.00"> 
+                <strong>Hourly Pay-Rate:</strong>
+                <mat-chip-listbox>
+                    <mat-chip color="accent">${{ GetEmployeeDetails().payRate }}/hr</mat-chip>
+                </mat-chip-listbox>      
+            </div>
+            <div class="details-row" >
+                <strong>Employment Status:</strong>
+                <mat-chip-listbox>
+                    
+                    <mat-chip color="warn">{{ GetEmployeeDetails().employmentStatus }} Employee</mat-chip>
+                </mat-chip-listbox>      
+            </div>
+        </mat-card-content>
+      </mat-card>
+
+      <app-profiledetails></app-profiledetails>
+    </div>
+  
+    <!-- System Announcer and Calendar Section -->
+    <div class="system-announcer-calendar">
+      <!-- System Announcer Card -->
+      <mat-card class="system-announcer">
+        <mat-card-title>System Announcer</mat-card-title>
+        <span class="spacer"></span>
+        <p>Total Announcements: {{this.GetEmployeeDetails()?.announcements?.length}}</p>
+        <mat-divider></mat-divider>
+        <mat-card-content style="overflow: scroll; overflow-x: hidden; max-height:300px;">
+          <div *ngFor="let announce of this.GetEmployeeDetails()?.announcements" style="background-color: #151515; width: 100%; height: auto;">
+            <p><strong>{{announce?.announcementId}})</strong> >{{announce?.title}}</p><p>Priority: <b>[{{announce?.priority?.toUpperCase()}}]</b></p>
+            <p style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+                {{announce?.message}}
+            </p>
+            <p style="font-family: 'Courier New', Courier, monospace; font-size: 12px">{{announce?.dateOfPost | date:'medium'}} - {{announce?.posterName}} [{{announce?.posterId}}]</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+  
+      <!-- Calendar Card -->
+      <mat-card class="schedule">
+        <mat-card-title>Weekly Schedule</mat-card-title>
+        <mat-card-content>
+          <full-calendar [options]="calendarOptions"></full-calendar>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+  
