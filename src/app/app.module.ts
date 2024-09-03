@@ -44,7 +44,8 @@ import { ChangePasswordComponent } from './employee/change-password/change-passw
 import { UpdateProfileComponent } from './employee/update-profile/update-profile.component';
 import { EditDialogComponent } from './employee/edit-dialog/edit-dialog.component';
 import { ConfirmDialogComponent } from './employee/confirm-dialog/confirm-dialog.component';
-
+import { ChatComponent } from './chat/chat.component';
+import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
@@ -61,9 +62,11 @@ import { ConfirmDialogComponent } from './employee/confirm-dialog/confirm-dialog
     ChangePasswordComponent,
     UpdateProfileComponent,
     EditDialogComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    ChatComponent
   ],
   imports: [
+    FormsModule,
     DecimalPipe,
     BrowserModule, 
     AppRoutingModule,     
