@@ -46,6 +46,12 @@ import { EditDialogComponent } from './employee/edit-dialog/edit-dialog.componen
 import { ConfirmDialogComponent } from './employee/confirm-dialog/confirm-dialog.component';
 import { ChatComponent } from './chat/chat.component';
 import { FormsModule } from '@angular/forms';
+import { EditorModule } from 'primeng/editor';
+import { NgprimedebugComponent } from './developer/ngprimedebug/ngprimedebug.component';
+import { EmployeedebugComponent } from './developer/employeedebug/employeedebug.component';
+import { ModpageComponent } from './modpage/modpage.component';
+import { ItemviewComponent } from './mod/itemview/itemview.component'
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -63,9 +69,14 @@ import { FormsModule } from '@angular/forms';
     UpdateProfileComponent,
     EditDialogComponent,
     ConfirmDialogComponent,
-    ChatComponent
+    ChatComponent,
+    NgprimedebugComponent,
+    EmployeedebugComponent,
+    ModpageComponent,
+    ItemviewComponent
   ],
   imports: [
+    EditorModule,
     FormsModule,
     DecimalPipe,
     BrowserModule, 

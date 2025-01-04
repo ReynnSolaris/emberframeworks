@@ -76,7 +76,7 @@
 
     <!-- System Announcer and Calendar Section -->
     <div class="system-announcer-calendar">
-      <mat-card class="system-announcer">
+      <mat-card class="system-announcer" *ngIf = "this.authService.employeeInfo.permissions.indexOf('Debugger') > -1">
         <app-chat></app-chat>
       </mat-card>
       <!-- System Announcer Card -->

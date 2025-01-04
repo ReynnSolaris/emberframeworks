@@ -12,6 +12,10 @@ import { authGuard } from './guards/auth.guard';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { ChangePasswordComponent } from './employee/change-password/change-password.component';
 import { UpdateProfileComponent } from './employee/update-profile/update-profile.component';
+import { EmployeedebugComponent } from './developer/employeedebug/employeedebug.component';
+import { NgprimedebugComponent } from './developer/ngprimedebug/ngprimedebug.component';
+import { ModpageComponent } from './modpage/modpage.component';
+import { ItemviewComponent } from './mod/itemview/itemview.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -21,6 +25,30 @@ const routes: Routes = [
   { path: 'billing/payment', component: PaymentComponent},
   { path: 'employee', redirectTo: 'employee/login'},
   { path: 'unauthorized', component: UnauthorizedComponent },
+  { 
+    path: 'developer/ngprime', 
+    component: NgprimedebugComponent,
+    canActivate: [authGuard],
+    data: {
+        role: 'Developer',
+      }
+  },
+  {
+    path: 'mod/trial_eldritch',
+    component: ModpageComponent,
+  },
+  {
+    path: 'mod/model_view',
+    component: ItemviewComponent,
+  },
+  { 
+    path: 'developer/employeedebug', 
+    component: EmployeedebugComponent,
+    canActivate: [authGuard],
+    data: {
+        role: 'Developer',
+      }
+  },
   { 
     path: 'employee/profile', 
     component: ProfileComponent,

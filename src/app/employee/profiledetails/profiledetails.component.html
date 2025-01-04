@@ -38,5 +38,20 @@
           <button mat-button>Employee Records</button>
         </div>
       </mat-expansion-panel>
+
+    <!--Developer Settings Expansion Panel -->
+    <mat-expansion-panel *ngIf = "this.authService.employeeInfo.permissions.indexOf('Developer') > -1">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+            Developer Settings
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="settings-content">
+            <button mat-button (click)="goTo('developer/ngprime/')">NG Prime Debug Page</button>
+            <button mat-button>Employee Debug Zone</button>
+        </div>
+        </mat-expansion-panel>
     </mat-accordion>
+
+    
   </div>
