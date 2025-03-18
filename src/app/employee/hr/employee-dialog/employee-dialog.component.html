@@ -1,0 +1,47 @@
+<h3 mat-dialog-title>{{ isEditMode ? 'Edit Employee' : 'Add Employee' }}</h3>
+<mat-dialog-content [formGroup]="employeeForm">
+  
+  <!-- Username -->
+  <mat-form-field appearance="outline">
+    <mat-label>Username</mat-label>
+    <input matInput formControlName="userName">
+  </mat-form-field>
+
+  <!-- First Name -->
+  <mat-form-field appearance="outline">
+    <mat-label>First Name</mat-label>
+    <input matInput formControlName="firstName">
+  </mat-form-field>
+
+  <!-- Last Name -->
+  <mat-form-field appearance="outline">
+    <mat-label>Last Name</mat-label>
+    <input matInput formControlName="lastName">
+  </mat-form-field>
+
+  <!-- Preferred Name -->
+  <mat-form-field appearance="outline">
+    <mat-label>Preferred Name</mat-label>
+    <input matInput formControlName="preferredName">
+  </mat-form-field>
+
+  <!-- Address -->
+  <mat-form-field appearance="outline">
+    <mat-label>Address</mat-label>
+    <input matInput formControlName="address">
+  </mat-form-field>
+
+  <!-- Read-Only Permissions -->
+  <div *ngIf="permissions.length > 0">
+    <h4>Permissions:</h4>
+    <mat-chip-listbox>
+      <mat-chip *ngFor="let perm of permissions">{{ perm }}</mat-chip>
+    </mat-chip-listbox>
+  </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-button color="primary" (click)="onSave()" [disabled]="!employeeForm.valid">Save</button>
+</mat-dialog-actions>

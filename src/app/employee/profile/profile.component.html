@@ -1,32 +1,27 @@
 <!-- src/app/dashboard/dashboard.component.html -->
 <div class="dashboard-container">
-    <!-- Employee Profile and Details Wrapper -->
+    <!-- Employee Profile & Details Wrapper -->
     <div class="profile-details-wrapper">
+      
       <!-- Employee Profile Card -->
       <mat-card class="employee-profile">
-        <img mat-card-image [src]="GetEmployeeDetails().photoUrl" alt="Employee Photo">
-        <mat-card-content>
-          <h2>{{ GetEmployeeDetails().name }}</h2>
+        <div class="profile-header">
+          <img mat-card-image [src]="'/assets/EmployeePhotos/'+employee?.userName+'_'+employee?.userId+'.jpg'" alt="Employee Photo">
+        </div>
+        <mat-card-content class="profile-content">
+          <h2 class="employee-name">{{ employee?.preferredName != "" ? employee?.preferredName : employee?.firstName }} {{employee?.lastName}}</h2>
           <div class="details-row">
-            Employee Role:
-            <mat-chip color="custom1">{{ GetEmployeeDetails().roleName }}</mat-chip>
+            <strong>Role:</strong><br/>
+            <mat-chip class="mat-custom2">{{ employee?.roleName }}</mat-chip>
           </div>
           <div class="details-row">
-            Employee Title:
-            <mat-chip color="custom1">{{ GetEmployeeDetails().title }}</mat-chip>
+            <strong>Title:</strong><br/>
+            <mat-chip class="mat-primary">{{ employee?.jobTitle }}</mat-chip>
           </div>
           <div class="details-row">
-            Employee ID:
-            <mat-chip color="custom2">{{ GetEmployeeDetails().id }}</mat-chip>
+            <strong>Employee ID:</strong><br/>
+            <mat-chip class="mat-accent">{{ employee?.userId }}</mat-chip>
           </div>
-        </mat-card-content>
-      </mat-card>
-      
-      <!-- Developer Mode Stuff -->
-      <mat-card *ngIf="isDev()">
-        <mat-card-title>Development Environment Information</mat-card-title>
-        <mat-card-content>
-            <b>Permissions: </b>{{this.GetEmployeeDetails().permissions | json}}
         </mat-card-content>
       </mat-card>
 
@@ -35,68 +30,114 @@
         <mat-card-title>Employee Details</mat-card-title>
         <mat-card-content>
           <div class="details-row">
-            <strong>Address:</strong> 
-            <mat-chip-listbox [class]="this.GetEmployeeDetails().address == 'No address' ? '' : 'mat-mdc-chip-set-stacked'">
-                <mat-chip color="custom2" *ngIf="this.GetEmployeeDetails().address == 'No address'">No Address Listed</mat-chip>
-                <mat-chip color="primary" *ngIf="this.GetEmployeeDetails().address !== 'No address'">{{ GetEmployeeDetails().address }}</mat-chip>
-            </mat-chip-listbox>
+            <strong>Address:</strong><br/>
+            <mat-chip class="mat-custom1">{{ employee?.address || 'No Address Listed' }}</mat-chip>
           </div>
           <div class="details-row">
             <strong>Emergency Contacts:</strong>
-            <mat-chip-listbox class="mat-mdc-chip-set-stacked" >
-              <mat-chip color="custom2" *ngIf="this.GetEmployeeDetails().emergencyContacts.length == 0">No Emergency Contacts Listed</mat-chip>
-              <mat-chip color="custom3" *ngFor="let contact of this.GetEmployeeDetails().emergencyContacts">{{ contact.fullName }} - {{contact.phone}}</mat-chip>
+            <mat-chip-listbox class="mat-mdc-chip-set-stacked">
+              <mat-chip *ngIf="employee?.emergencyContacts?.length === 0" class="mat-warn">
+                No Emergency Contacts Listed
+              </mat-chip>
+              <mat-chip *ngFor="let contact of employee?.emergencyContacts" class="mat-custom3">
+                {{ contact.fullName }} - {{ contact.phone }}
+              </mat-chip>
             </mat-chip-listbox>
           </div>
-          <div class="details-row" *ngIf = "this.GetEmployeeDetails().salary != 0.00">
-            <strong>Salary Pay-Rate:</strong>
-            <mat-chip-listbox >
-                <mat-chip color="accent">${{ GetEmployeeDetails().salary | number }}/yearly</mat-chip>
-                </mat-chip-listbox>
-            </div>
-            <div class="details-row" *ngIf = "this.GetEmployeeDetails().payRate != 0.00"> 
-                <strong>Hourly Pay-Rate:</strong>
-                <mat-chip-listbox>
-                    <mat-chip color="accent">${{ GetEmployeeDetails().payRate }}/hr</mat-chip>
-                </mat-chip-listbox>      
-            </div>
-            <div class="details-row" >
-                <strong>Employment Status:</strong>
-                <mat-chip-listbox>
-                    
-                    <mat-chip color="warn">{{ GetEmployeeDetails().employmentStatus }} Employee</mat-chip>
-                </mat-chip-listbox>      
-            </div>
+          <div class="details-row">
+            <strong>Employment Status:</strong><br/>
+            <mat-chip class="mat-warn">{{ employee?.employmentStatus }} Employee</mat-chip>
+          </div>
         </mat-card-content>
       </mat-card>
 
-      <app-profiledetails></app-profiledetails>
+      <!-- Role-Based Actions Panel -->
+        <mat-expansion-panel *ngIf="employee?.permissions?.length" class="role-card">
+            <mat-expansion-panel-header>
+            <mat-panel-title>Available Actions</mat-panel-title>
+            </mat-expansion-panel-header>
+        
+            <mat-card-content>
+            <!-- User Actions -->
+            <mat-expansion-panel *ngIf="employee?.permissions?.includes('Write')" class="perm-panel">
+                <mat-expansion-panel-header>
+                <mat-panel-title>User</mat-panel-title>
+                </mat-expansion-panel-header>
+                <ul class="action-list">
+                <li routerLink="/employee/profile/update">Update Profile</li>
+                <li routerLink="/employee/profile/change-password">Change Password</li>
+                </ul>
+            </mat-expansion-panel>
+            <!-- Developer Actions -->
+            <mat-expansion-panel *ngIf="employee?.permissions?.includes('Developer')" class="perm-panel">
+                <mat-expansion-panel-header>
+                <mat-panel-title>Developer</mat-panel-title>
+                </mat-expansion-panel-header>
+                <b>Permissions: </b> <pre>{{ employee?.permissions | json }}</pre>
+                <ul class="action-list">
+                <li>Manage System Configuration</li>
+                <li>Access Developer Debugging Tools</li>
+                <li>API Management</li>
+                </ul>
+            </mat-expansion-panel>
+        
+            <!-- Employee Actions -->
+            <mat-expansion-panel *ngIf="employee?.permissions?.includes('Employee')" class="perm-panel">
+                <mat-expansion-panel-header>
+                <mat-panel-title>Employee</mat-panel-title>
+                </mat-expansion-panel-header>
+                <ul class="action-list">
+                <li>Update Profile</li>
+                <li>Change Password</li>
+                </ul>
+            </mat-expansion-panel>
+        
+            <!-- Manager Actions -->
+            <mat-expansion-panel *ngIf="employee?.permissions?.includes('Manager')" class="perm-panel">
+                <mat-expansion-panel-header>
+                <mat-panel-title>Manager</mat-panel-title>
+                </mat-expansion-panel-header>
+                <ul class="action-list">
+                <li>Review Employee Incidents</li>
+                <li>Generate Reports</li>
+                </ul>
+            </mat-expansion-panel>
+        
+            <!-- HR Actions -->
+            <mat-expansion-panel *ngIf="employee?.permissions?.includes('HR')" class="perm-panel">
+                <mat-expansion-panel-header>
+                <mat-panel-title>HR</mat-panel-title>
+                </mat-expansion-panel-header>
+                <ul class="action-list">
+                <li routerLink="/hr/employee-management">Employee List</li>
+                <li>Process Employee Terminations</li>
+                <li>Approve Promotions</li>
+                </ul>
+            </mat-expansion-panel>
+            </mat-card-content>
+        </mat-expansion-panel>
+  
     </div>
     
-
-    <!-- System Announcer and Calendar Section -->
+    <!-- System Announcer & Calendar Section -->
     <div class="system-announcer-calendar">
-      <mat-card class="system-announcer" *ngIf = "this.authService.employeeInfo.permissions.indexOf('Debugger') > -1">
-        <app-chat></app-chat>
-      </mat-card>
-      <!-- System Announcer Card -->
       <mat-card class="system-announcer">
         <mat-card-title>System Announcer</mat-card-title>
-        <span class="spacer"></span>
-        <p>Total Announcements: {{this.GetEmployeeDetails()?.announcements?.length}}</p>
+        <p>Total Announcements: {{ employee?.announcements?.length || 0 }}</p>
         <mat-divider></mat-divider>
-        <mat-card-content style="overflow: scroll; overflow-x: hidden; max-height:300px;">
-          <div *ngFor="let announce of this.GetEmployeeDetails()?.announcements" style="background-color: #151515; width: 100%; height: auto;">
-            <p><strong>{{announce?.announcementId}})</strong> >{{announce?.title}}</p><p>Priority: <b>[{{announce?.priority?.toUpperCase()}}]</b></p>
-            <p style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
-                {{announce?.message}}
+        <mat-card-content class="announcer-content">
+          <div *ngFor="let announce of employee?.announcements" class="announcement-box">
+            <p><strong>{{ announce?.announcementId }})</strong> {{ announce?.title }}</p>
+            <p>Priority: <b>[{{ announce?.priority?.toUpperCase() }}]</b></p>
+            <p class="announcement-message">{{ announce?.message }}</p>
+            <p class="announcement-footer">
+              {{ announce?.dateOfPost | date:'medium' }} - {{ announce?.posterName }} [{{ announce?.posterId }}]
             </p>
-            <p style="font-family: 'Courier New', Courier, monospace; font-size: 12px">{{announce?.dateOfPost | date:'medium'}} - {{announce?.posterName}} [{{announce?.posterId}}]</p>
           </div>
         </mat-card-content>
       </mat-card>
   
-      <!-- Calendar Card -->
+      <!-- Calendar -->
       <mat-card class="schedule">
         <mat-card-title>Weekly Schedule</mat-card-title>
         <mat-card-content>
@@ -104,5 +145,4 @@
         </mat-card-content>
       </mat-card>
     </div>
-  </div>
-  
+</div>

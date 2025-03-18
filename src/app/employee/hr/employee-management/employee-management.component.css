@@ -1,0 +1,119 @@
+.employee-management {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.header-actions {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* Table Styling */
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    background-color: #222; /* Light gray background for contrast */
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Headers */
+table mat-header-cell {
+    font-weight: bold;
+    background-color: #0347A7; /* Dark blue header */
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+/* Table Rows */
+table mat-row:nth-child(even) mat-cell {
+    background-color: #f1f1f1; /* Alternating row color */
+}
+
+table mat-row:nth-child(odd) mat-cell {
+    background-color: white;
+}
+
+/* Table Cell Styling */
+table mat-cell, 
+table mat-header-cell {
+    padding: 12px; /* Keep uniform spacing */
+    text-align: left;
+    vertical-align: middle; /* Ensure alignment */
+    height: 52px; /* Match row height */
+}
+
+/* Fix Actions Column Alignment */
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    align-items: center;
+    height: 100%;
+}
+
+/* Fix Button Sizing */
+.action-buttons button {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Mat Icon Button Fix */
+button mat-icon {
+    font-size: 24px; /* Standard icon size */
+    width: 24px;
+    height: 24px;
+}
+
+/* Chips */
+mat-chip {
+    font-size: 14px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+/* Time Difference */
+.time-difference {
+    font-size: 14px;
+    color: gray;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+    .employee-management {
+        padding: 10px;
+    }
+
+    .header-actions {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .table-container {
+        overflow-x: auto;
+    }
+
+    table mat-cell, 
+    table mat-header-cell {
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    .action-buttons {
+        gap: 5px;
+    }
+}

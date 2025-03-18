@@ -1,102 +1,162 @@
-/* src/app/dashboard/dashboard.component.css */
+/* Container */
 .dashboard-container {
     display: flex;
+    flex-wrap: wrap;
     gap: 20px;
     padding: 20px;
     background-color: #1e1e1e;
     color: #eee;
-  }
-  
-  .profile-details-wrapper {
+    animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+/* Profile & Details */
+.profile-details-wrapper {
     display: flex;
     flex-direction: column;
     gap: 20px;
     max-width: 500px;
-    width: 50%; /* Adjust width as needed */
-  }
-  
-  .employee-profile, .employee-details {
-    background-color: #333;
-    color: #eee;
-    border-radius: 8px;
-    overflow: hidden;
-  }
+    width: 50%;
+}
 
-  .mat-mdc-chip-set {
-    max-width: 200px;
-  }
-  
-  .mat-custom1 {
-    background-color: darkgreen!important;
-    color:#444!important;
-  }
-
-  .mat-custom2 {
-    background-color: darkred!important;
-    color:#444!important;
-  }
-
-  .mat-custom3 {
-    background-color: rosybrown!important;
-    color: #444!important
-  }
-
-  .mat-primary {
-    background-color: darkgoldenrod!important;
-    color:#444!important;
-  }
-
-  .mat-accent {
-    background-color: darkcyan!important;
-    color:#444!important;
-  }
-
-  .mat-warn {
-    background-color: rebeccapurple!important;
-    color:#444!important;
-  }
-
-  .employee-profile {
+/* Profile Card */
+.employee-profile {
     text-align: center;
-  }
-  
-  .employee-profile img {
-    max-width: 100%;
-    border-bottom: 1px solid #444;
-  }
-  
-  .employee-details {
+    overflow: hidden;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #2b2b2b, #1e1e1e);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.profile-header img {
+    width: 100%;
+    border-bottom: 3px solid #444;
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+.profile-content {
+    padding: 15px;
+}
+
+.employee-name {
+    font-size: 22px;
+    font-weight: bold;
+    color: #f1f1f1;
+}
+
+/* Details & Developer Mode */
+.employee-details, .dev-card {
+    background: #333;
+    border-radius: 10px;
     padding: 20px;
-  }
-  
-  .mat-card-title {
-    margin-bottom: 16px;
-    color: #fff;
-  }
-  
-  .details-row {
-    margin-bottom: 10px;
-  }
-  
-  .system-announcer-calendar {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* System Announcer & Calendar */
+.system-announcer-calendar {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    width: 50%; /* Adjust width as needed */
-  }
-  
-  .system-announcer, .schedule {
+    width: 50%;
+}
+
+.system-announcer, .schedule {
     background-color: #333;
-    color: #eee;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+/* Announcements */
+.announcer-content {
+    overflow-y: auto;
+    max-height: 300px;
+}
+
+.announcement-box {
+    background: #252525;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+/* Mat-Chip ListBox - Ensures Chips Align Properly */
+.mat-chip-listbox {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/* Mat-Chip Styling - Prevents Oversizing */
+mat-chip {
+    font-size: 12px !important;
+    padding: 2px 8px !important;
+    border-radius: 8px !important;
+    font-weight: 500 !important;
+    display: inline-flex !important;
+    align-items: center;
+    min-height: 22px !important;
+    line-height: 1 !important;
+    max-width: fit-content !important;
+    height: auto !important;
+}
+
+/* Individual Chip Colors - Keeping a Clean, Professional Look */
+.mat-custom1 { background-color: #3b82f6 !important; color: white !important; }
+.mat-custom2 { background-color: #ef4444 !important; color: white !important; }
+.mat-custom3 { background-color: #f97316 !important; color: white !important; }
+.mat-primary { background-color: #22c55e !important; color: white !important; }
+.mat-accent { background-color: #6366f1 !important; color: white !important; }
+.mat-warn { background-color: #9333ea !important; color: white !important; }
+
+/* Prevent Chips from Stretching */
+mat-chip::ng-deep {
+    display: inline-block !important;
+    white-space: nowrap !important;
+}
+
+/* Role-Based Actions Card */
+.role-card {
+    background: #2c2c2c;
     border-radius: 8px;
-    overflow: hidden;
-  }
-  
-  .system-announcer {
-    padding: 20px;
-  }
-  
-  .schedule {
-    padding: 20px;
-  }
-  
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Permission Panels */
+.perm-panel {
+    background: #333;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+/* Action List Styling */
+.action-list {
+    list-style-type: none;
+    padding: 10px;
+    margin: 0;
+}
+
+.action-list li {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px;
+    margin-bottom: 6px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.action-list li:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+
+
+/* Animations */
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

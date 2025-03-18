@@ -1,0 +1,93 @@
+<mat-card class="employee-management">
+    <mat-card-title>Employee Management</mat-card-title>
+  
+    <!-- Top Actions -->
+    <div class="header-actions">
+      <button mat-raised-button color="primary" (click)="openDialog()">+ Add Employee</button>
+    </div>
+  
+    <!-- Employee Table -->
+    <div class="table-container">
+      <table mat-table [dataSource]="employees" class="mat-elevation-z8 custom-table">
+      
+        <!-- UserId Column -->
+        <ng-container matColumnDef="userId">
+            <th mat-header-cell *matHeaderCellDef> Employee Id </th>
+            <td mat-cell *matCellDef="let employee"> <b>{{ employee.userId }}</b> </td>
+        </ng-container>
+
+        <!-- Username Column -->
+        <ng-container matColumnDef="userName">
+          <th mat-header-cell *matHeaderCellDef> Username </th>
+          <td mat-cell *matCellDef="let employee"> <b>{{ employee.userName }}</b> </td>
+        </ng-container>
+  
+        <!-- Full Name Column -->
+        <ng-container matColumnDef="fullName">
+          <th mat-header-cell *matHeaderCellDef> Full Name </th>
+          <td mat-cell *matCellDef="let employee"> {{ employee.firstName }} {{ employee.lastName }} </td>
+        </ng-container>
+  
+        <!-- Role Column -->
+        <ng-container matColumnDef="role">
+          <th mat-header-cell *matHeaderCellDef> Role </th>
+          <td mat-cell *matCellDef="let employee">
+            <mat-chip color="accent">{{ employee.roleName }}</mat-chip>
+          </td>
+        </ng-container>
+  
+        <!-- Job Title Column -->
+        <ng-container matColumnDef="jobTitle">
+          <th mat-header-cell *matHeaderCellDef> Job Title </th>
+          <td mat-cell *matCellDef="let employee"> {{ employee.jobTitle || 'N/A' }} </td>
+        </ng-container>
+  
+        <!-- Salary Column -->
+        <ng-container matColumnDef="salary">
+          <th mat-header-cell *matHeaderCellDef> Salary </th>
+          <td mat-cell *matCellDef="let employee">
+            <b>{{ employee.salaryRate ? ('$' + employee.salaryRate.toLocaleString()) : 'N/A' }}</b>
+          </td>
+        </ng-container>
+  
+        <!-- Position Type Column -->
+        <ng-container matColumnDef="positionType">
+          <th mat-header-cell *matHeaderCellDef> Position Type </th>
+          <td mat-cell *matCellDef="let employee"> 
+            <mat-chip color="primary">{{ employee.positionType }}</mat-chip>
+          </td>
+        </ng-container>
+  
+        <!-- Deleted Time Column -->
+        <ng-container matColumnDef="deletedTime">
+          <th mat-header-cell *matHeaderCellDef> Deletion Time </th>
+          <td mat-cell *matCellDef="let employee">
+            <span *ngIf="employee.deletedTime">
+              {{ employee.deletedTime | date: 'short' }} 
+              <span class="time-difference">
+                ({{ calculateTimeDifference(employee.deletedTime) }} ago)
+              </span>
+            </span>
+            <span *ngIf="!employee.deletedTime">N/A</span>
+          </td>
+        </ng-container>
+  
+        <!-- Actions Column (Now on the Far Right) -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef class="actions-header"> Actions </th>
+          <td mat-cell *matCellDef="let employee" class="action-buttons">
+            <button mat-icon-button (click)="openDialog(employee)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteEmployee(employee.userId)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+  
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </mat-card>
+  

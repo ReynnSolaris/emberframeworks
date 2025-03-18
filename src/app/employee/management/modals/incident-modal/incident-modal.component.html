@@ -1,0 +1,27 @@
+<mat-dialog-content class="bg-gray-900 text-white p-6 rounded-lg w-[600px] max-w-full">
+    <!-- Header -->
+    <div class="flex justify-between items-center border-b border-gray-700 pb-2 mb-4">
+      <h2 class="text-lg font-semibold">
+        {{ incident.type }} - {{ incident.date }}
+      </h2>
+      <button mat-icon-button (click)="closeDialog()">
+        <mat-icon class="text-gray-400 hover:text-white">close</mat-icon>
+      </button>
+    </div>
+  
+    <!-- Reported By -->
+    <div class="text-sm text-gray-400 mb-2">
+      Reported By: <span class="text-white">{{ incident.reportedBy }}</span> ({{ incident.reportedById }})
+    </div>
+  
+    <!-- Incident Details -->
+    <pre class="bg-gray-800 text-gray-200 p-4 rounded-md text-sm overflow-x-auto">{{ incident.details }}</pre>
+  
+    <!-- Actions -->
+    <div class="flex justify-end space-x-3 mt-4">
+      <button mat-button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-md" (click)="closeDialog()">Close</button>
+      <button mat-button class="bg-mint-green-500 hover:bg-mint-green-600 text-black px-4 py-2 rounded-md">Edit</button>
+      <button mat-button class="bg-persimmon-500 hover:bg-persimmon-600 text-white px-4 py-2 rounded-md">Delete</button>
+    </div>
+  </mat-dialog-content>
+  

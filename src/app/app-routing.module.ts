@@ -8,7 +8,7 @@ import { PaymentComponent } from './billing/payment/payment.component';
 import { LoginComponent } from './employee/login/login.component';
 import { ProfileComponent } from './employee/profile/profile.component';
 import { ProfiledetailsComponent } from './employee/profiledetails/profiledetails.component';
-import { authGuard } from './guards/auth.guard';
+import { AuthGuard } from './guards/auth.guard';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { ChangePasswordComponent } from './employee/change-password/change-password.component';
 import { UpdateProfileComponent } from './employee/update-profile/update-profile.component';
@@ -16,19 +16,23 @@ import { EmployeedebugComponent } from './developer/employeedebug/employeedebug.
 import { NgprimedebugComponent } from './developer/ngprimedebug/ngprimedebug.component';
 import { ModpageComponent } from './modpage/modpage.component';
 import { ItemviewComponent } from './mod/itemview/itemview.component';
+import { AppointmentComponent } from './billing/appointment/appointment.component';
+import { EmployeeManagementComponent } from './employee/hr/employee-management/employee-management.component';
+import { ManagementProfileComponent } from './employee/management/profile/profile.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'services', component: ServicesComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'policies', component: PoliciesComponent },
+  { path: 'billing/appointment', component: AppointmentComponent},
   { path: 'billing/payment', component: PaymentComponent},
   { path: 'employee', redirectTo: 'employee/login'},
   { path: 'unauthorized', component: UnauthorizedComponent },
   { 
     path: 'developer/ngprime', 
     component: NgprimedebugComponent,
-    canActivate: [authGuard],
+    canActivate: [AuthGuard],
     data: {
         role: 'Developer',
       }
@@ -44,7 +48,7 @@ const routes: Routes = [
   { 
     path: 'developer/employeedebug', 
     component: EmployeedebugComponent,
-    canActivate: [authGuard],
+    canActivate: [AuthGuard],
     data: {
         role: 'Developer',
       }
@@ -52,25 +56,31 @@ const routes: Routes = [
   { 
     path: 'employee/profile', 
     component: ProfileComponent,
-    canActivate: [authGuard],
+    canActivate: [AuthGuard],
   },
   { 
     path: 'employee/profile/change-password', 
     component: ChangePasswordComponent,
-    canActivate: [authGuard],
+    canActivate: [AuthGuard],
   },
   { 
     path: 'employee/profile/update', 
     component: UpdateProfileComponent,
-    canActivate: [authGuard],
+    canActivate: [AuthGuard],
   },
   { 
-    path: 'employee/profile/:userId', 
-    component: ProfiledetailsComponent,
-    canActivate: [authGuard],
+    path: 'hr/employee-management/:userId', 
+    component: ManagementProfileComponent,
+    canActivate: [AuthGuard],
     data: {
         role: 'Manager',
       }
+  },
+  { 
+    path: 'hr/employee-management', 
+    component: EmployeeManagementComponent, 
+    canActivate: [AuthGuard], 
+    data: { role: 'HR' }
   },
   { path: 'employee/login', component: LoginComponent},
   { path: '**', redirectTo: '' },

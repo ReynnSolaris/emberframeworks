@@ -1,0 +1,41 @@
+.dialog-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .dialog-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .name-fields,
+  .salary-fields {
+    display: flex;
+    gap: 15px;
+  }
+  
+  mat-form-field {
+    width: 100%;
+  }
+  
+  .emergency-contact-container {
+    margin-top: 15px;
+  }
+  
+  .section-title {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  mat-icon {
+    cursor: pointer;
+  }
+  

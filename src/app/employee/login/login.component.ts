@@ -16,9 +16,6 @@ export class LoginComponent {
         password: ['', [Validators.required]]
     });
     ngOnInit(): void {
-        if (this.authService.isLoggedIn()) {
-            this.router.navigate(['employee/profile']);
-        }
     }
   
     onSubmit(): void {

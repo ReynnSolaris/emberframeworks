@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { EditDialogComponent } from '../edit-dialog/edit-dialog.component';
 import { AuthService } from '../../auth.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-update-profile',
@@ -12,9 +13,7 @@ import { AuthService } from '../../auth.service';
   styleUrls: ['./update-profile.component.css']
 })
 export class UpdateProfileComponent implements OnInit {
-  bioForm: FormGroup = this.fb.group({
-    bio: ['']
-  });
+  bioForm: FormGroup;
   contactsDataSource = new MatTableDataSource<Contact>([]);
   addressesDataSource = new MatTableDataSource<Address>([]);
   phoneNumbersDataSource = new MatTableDataSource<PhoneNumber>([]);
@@ -23,133 +22,104 @@ export class UpdateProfileComponent implements OnInit {
   addressColumns: string[] = ['address', 'actions'];
   phoneColumns: string[] = ['phoneNumber', 'actions'];
 
-  constructor(private fb: FormBuilder, public authService: AuthService, private dialog: MatDialog) {}
-
-  ngOnInit(): void {
-    this.loadEmployeeDetails();
+  constructor(private fb: FormBuilder, public authService: AuthService, private dialog: MatDialog) {
+    this.bioForm = this.fb.group({ bio: [''] });
   }
 
-  loadEmployeeDetails() {
-    // Use the AuthService to get the employee details
-    this.authService.getUserInfo(this.authService.v.get('EmployeeName')).subscribe( 
-        response => {
-            console.log(response);
-            this.contactsDataSource.data = response.emergencyContacts || [];
-            // Assuming addresses and phone numbers are part of the employeeDetails
-            this.addressesDataSource.data = response.address ? [{ address: response.address }] : [];
-            this.phoneNumbersDataSource.data = response.phoneNumbers || [];
-        },
-        error => {
-            console.log(error);
-        }
-    )
+  async ngOnInit(): Promise<void> {
+    await this.loadEmployeeDetails();
   }
 
+  /** Load employee details and update UI */
+  async loadEmployeeDetails() {
+    try {
+      const username = this.authService.getTokenInformation().get('EmployeeName');
+      if (!username) return;
+
+      const response = await firstValueFrom(this.authService.getUserInfo(username));
+      console.log('Employee Data:', response);
+
+      // Populate the form and tables
+      this.bioForm.patchValue({ bio: response.bio || '' });
+      this.contactsDataSource.data = response.emergencyContacts || [];
+      this.addressesDataSource.data = response.address ? [{ address: response.address }] : [];
+      this.phoneNumbersDataSource.data = response.phoneNumbers || [];
+    } catch (error) {
+      console.error('Error fetching employee details:', error);
+    }
+  }
+
+  /** Save bio form */
   onSubmitBio() {
-    // Save bio logic here
     console.log('Bio updated:', this.bioForm.value);
+    // TODO: Send this to the API to save bio
   }
 
+  /** Generic function to handle adding/editing table items */
+  openEditDialog<T>(item: T | null, dataSource: MatTableDataSource<T>, defaultData: T) {
+    const dialogRef = this.dialog.open(EditDialogComponent, {
+      width: '300px',
+      data: item ? { ...item } : defaultData
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if (item) {
+          // Update existing item
+          const updatedData = [...dataSource.data];
+          const index = updatedData.findIndex(d => d === item);
+          updatedData[index] = result;
+          dataSource.data = updatedData; // Immutable update to trigger change detection
+        } else {
+          // Add new item
+          dataSource.data = [...dataSource.data, result];
+        }
+      }
+    });
+  }
+
+  /** Generic function to handle deleting table items */
+  confirmDelete<T>(item: T, dataSource: MatTableDataSource<T>, message: string) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '250px',
+      data: { message }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        dataSource.data = dataSource.data.filter(i => i !== item); // Immutable update
+      }
+    });
+  }
+
+  /** Edit Contact */
   openEditContactDialog(contact?: Contact) {
-    const dialogRef = this.dialog.open(EditDialogComponent, {
-      width: '300px',
-      data: contact ? {...contact} : {fullName: '', phone: ''}
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        if (contact) {
-          // Update existing contact
-          const index = this.contactsDataSource.data.indexOf(contact);
-          this.contactsDataSource.data[index] = result;
-        } else {
-          // Add new contact
-          this.contactsDataSource.data.push(result);
-        }
-        this.contactsDataSource._updateChangeSubscription(); // Refresh data
-      }
-    });
+    this.openEditDialog(contact || null, this.contactsDataSource, { contactId: 0, fullName: '', phone: '' });
   }
 
+  /** Delete Contact */
   confirmDeleteContact(contact: Contact) {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '250px',
-      data: {message: 'Are you sure you want to delete this contact?'}
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.contactsDataSource.data = this.contactsDataSource.data.filter(c => c !== contact);
-      }
-    });
+    this.confirmDelete(contact, this.contactsDataSource, 'Are you sure you want to delete this contact?');
   }
 
+  /** Edit Address */
   openEditAddressDialog(address?: Address) {
-    const dialogRef = this.dialog.open(EditDialogComponent, {
-      width: '300px',
-      data: address ? {...address} : {address: ''}
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        if (address) {
-          // Update existing address
-          const index = this.addressesDataSource.data.indexOf(address);
-          this.addressesDataSource.data[index] = result;
-        } else {
-          // Add new address
-          this.addressesDataSource.data.push(result);
-        }
-        this.addressesDataSource._updateChangeSubscription(); // Refresh data
-      }
-    });
+    this.openEditDialog(address || null, this.addressesDataSource, { address: '' });
   }
 
+  /** Delete Address */
   confirmDeleteAddress(address: Address) {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '250px',
-      data: {message: 'Are you sure you want to delete this address?'}
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.addressesDataSource.data = this.addressesDataSource.data.filter(a => a !== address);
-      }
-    });
+    this.confirmDelete(address, this.addressesDataSource, 'Are you sure you want to delete this address?');
   }
 
+  /** Edit Phone Number */
   openEditPhoneNumberDialog(phoneNumber?: PhoneNumber) {
-    const dialogRef = this.dialog.open(EditDialogComponent, {
-      width: '300px',
-      data: phoneNumber ? {...phoneNumber} : {phoneNumber: ''}
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        if (phoneNumber) {
-          // Update existing phone number
-          const index = this.phoneNumbersDataSource.data.indexOf(phoneNumber);
-          this.phoneNumbersDataSource.data[index] = result;
-        } else {
-          // Add new phone number
-          this.phoneNumbersDataSource.data.push(result);
-        }
-        this.phoneNumbersDataSource._updateChangeSubscription(); // Refresh data
-      }
-    });
+    this.openEditDialog(phoneNumber || null, this.phoneNumbersDataSource, { phoneNumber: '' });
   }
 
+  /** Delete Phone Number */
   confirmDeletePhoneNumber(phoneNumber: PhoneNumber) {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '250px',
-      data: {message: 'Are you sure you want to delete this phone number?'}
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.phoneNumbersDataSource.data = this.phoneNumbersDataSource.data.filter(p => p !== phoneNumber);
-      }
-    });
+    this.confirmDelete(phoneNumber, this.phoneNumbersDataSource, 'Are you sure you want to delete this phone number?');
   }
 }
 

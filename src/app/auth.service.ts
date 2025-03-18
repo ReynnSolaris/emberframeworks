@@ -1,141 +1,181 @@
-import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Injectable, PLATFORM_ID, inject } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject, catchError, firstValueFrom, map, switchMap } from 'rxjs';
 import { throwError, Observable } from 'rxjs';
 import { environment } from '../environments/environment';
-import { Hash } from 'crypto';
-import { UserInfo } from './models/UserInfo';
 import { Router } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common';
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-   constructor(private http: HttpClient, private route: Router) { }
-   public employeeInfo: any = {
+  private readonly platformId = inject(PLATFORM_ID);
+  private token: string = '';
+  private refreshTokenV: string = '';
+  private userData = new Map<string, any>();
+
+  public employeeInfo: any = {
     jobTitle: '',
-    userId: 1,
+    userId: null,
     roleName: '',
     permissions: [],
     userName: '',
-   };
-   private token: string = "";
-   public v = new Map<string, any>();
-    setToken(token: any, refreshToken: any) {
+  };
+
+  constructor(private http: HttpClient, private router: Router) { 
+    this.loadStoredToken();
+  }
+
+  /** Load token from local storage if available */
+  private loadStoredToken() {
     if (isPlatformBrowser(this.platformId)) {
-        const tokenStorage = localStorage.getItem('token'); 
-        if (tokenStorage) {
-            console.log("detected token change ~~ do something");
-            
-        }
-        localStorage.setItem('token', token);
-        localStorage.setItem('refreshToken', refreshToken);
-        const payload = atob(token.split('.')[1]); 
-        const parsedPayload = JSON.parse(payload);
-        this.setTokenInformation();
-        return true;
+      this.token = localStorage.getItem('token') || '';
+      this.refreshTokenV = localStorage.getItem('refreshToken') || '';
+      if (this.token) {
+        this.decodeToken();
+      }
     }
   }
 
-  setTokenInformation(): Map<string, any> {
-    this.v.set('EmployeeId', 0);
-    this.v.set('EmployeeRole', 'User');
-    this.v.set('EmployeeName', 'Username');
-
+   getToken(): string | null {
     if (isPlatformBrowser(this.platformId)) {
-        const tokenStorage = localStorage.getItem('token'); 
-        if (tokenStorage) {
-            const payload = atob(tokenStorage.split('.')[1]); 
-            const parsedPayload = JSON.parse(payload);
-            this.v.set('EmployeeId', Number.parseInt(parsedPayload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"]));
-            this.v.set('EmployeeName', parsedPayload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]);
-            this.v.set('EmployeeRole', parsedPayload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]);
-
-            this.getUserInfo(this.v.get('EmployeeName')).subscribe( 
-                response => {
-                    this.employeeInfo = response;
-                    console.log(this.employeeInfo, response);
-                },
-                error => {
-                    console.log(error);
-                }
-            )
-        }
+      return localStorage.getItem('token');
     }
-
-    return this.v;
+    return null;
   }
 
+  getRefreshToken(): string | null {
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage.getItem('refreshToken');
+    }
+    return null;
+  }
+
+  getRoles(): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.AUTH_API}/employee-management/roles`);
+  }
+
+  getJobTitles(): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.AUTH_API}/employee-management/jobTitles`);
+  }
+
+  refreshToken(): Observable<string> {
+    const accessToken = this.getToken();
+    const refreshToken = this.getRefreshToken();
+
+    if (!accessToken || !refreshToken) {
+      this.logOut();
+      return throwError(() => new Error('No refresh token available'));
+    }
+
+    return this.http.post<{ token: string; refreshToken: string }>(
+      `${environment.AUTH_API}/Authentication/RefreshToken`, // C# API endpoint
+      { token: accessToken, refreshToken: refreshToken }, // Send tokens in the request body
+      { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
+    ).pipe(
+      map(response => {
+        // ✅ Save new tokens
+        this.setToken(response.token, response.refreshToken);
+        return response.token;
+      }),
+      catchError(error => {
+        this.logOut();
+        return throwError(() => error);
+      })
+    );
+  }
+
+  /** Store tokens and update user state */
+  setToken(token: string, refreshToken: string) {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('token', token);
+      localStorage.setItem('refreshToken', refreshToken);
+      this.token = token;
+      this.refreshTokenV = refreshToken;
+      this.decodeToken();
+    }
+  }
+
+  /** Decode JWT Token & Extract Data */
+  private decodeToken() {
+    try {
+      if (!this.token) return;
+      const payload = JSON.parse(atob(this.token.split('.')[1]));
+      this.userData.set('EmployeeId', Number(payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"] || 0));
+      this.userData.set('EmployeeName', payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"] || '');
+      this.userData.set('EmployeeRole', payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] || 'User');
+    } catch (error) {
+      console.error("Error decoding JWT token", error);
+      this.logOut();
+    }
+  }
+
+  /** Retrieve token data */
   getTokenInformation(): Map<string, any> {
-    if (isPlatformBrowser(this.platformId)) {
-        const tokenStorage = localStorage.getItem('token'); 
-        if (tokenStorage) {
-            const payload = atob(tokenStorage.split('.')[1]); 
-            const parsedPayload = JSON.parse(payload);
-            this.v.set('EmployeeId', Number.parseInt(parsedPayload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"]));
-            this.v.set('EmployeeName', parsedPayload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]);
-            this.v.set('EmployeeRole', parsedPayload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]);
-        }
+    return this.userData;
+  }
+
+  /** Fetch full user details */
+  async fetchUserDetails(): Promise<any> {
+    try {
+      const username = this.userData.get('EmployeeName');
+      if (!username) return null;
+      const userInfo = await firstValueFrom(this.getUserInfo(username));
+      this.employeeInfo = userInfo;
+      return userInfo;
+    } catch (error) {
+      console.error("Error fetching user info:", error);
+      return null;
     }
-    return this.v;
   }
 
-  getEmployeeDetails(): any {
-    // This should ideally make an HTTP request to fetch employee details
-    // For now, we'll return a mock employee
-    var Name = `${this.employeeInfo?.firstName || ''} ${this.employeeInfo?.preferredName ? '"' + this.employeeInfo?.preferredName + '" ' : ''}${this.employeeInfo?.lastName}`;
-    return {
-        name: Name,
-        userName: this.employeeInfo.userName,
-        photoUrl: `/assets/EmployeePhotos/${this.employeeInfo.userName}_${this.employeeInfo.userId}.jpg`,
-        roleName: this.employeeInfo.roleName || '',
-        title: this.employeeInfo.jobTitle || '',
-        permissions: this.employeeInfo.permissions || [''],
-        id: this.employeeInfo.userId || '',
-        address: this.employeeInfo?.address || '',
-        emergencyContacts: this.employeeInfo?.emergencyContacts || [],
-        payRate: this.employeeInfo?.hourlyRate || 0.00,
-        employmentStatus: this.employeeInfo?.positionType || '',
-        salary: this.employeeInfo?.salaryRate || 0.00,
-        announcements: this.employeeInfo?.announcements,
-        schedule: [
-            { title: 'Task 1', start: '2024-06-17T07:30:00' },
-            { title: 'Task 2', start: '2024-06-17T11:45:00', end: '2024-06-10T14:15:00' },
-            { title: 'Task 3', start: '2024-06-19T09:00:00' },
-            { title: 'Task 4', start: '2024-06-19T17:30:00' },
-            { title: 'Task 5', start: '2024-06-20T13:15:00' }
-      ]
-    };
-  }
-  private readonly platformId = inject(PLATFORM_ID);
 
+  
+  /** Fetch user details from API */
+  getUserInfo(username: string): Observable<any> {
+    const url = `${environment.AUTH_API}/Authentication/GetUserInfo`;
+    return this.http.get(url, {
+      headers: new HttpHeaders({ username, token: this.token })
+    }).pipe(catchError(this.handleError));
+  }
+
+  /** Logout user */
   logOut() {
     if (isPlatformBrowser(this.platformId)) {
-        localStorage.setItem("token", "");
-        this.route.navigate(['employee/login']);
+      localStorage.removeItem("token");
+      localStorage.removeItem("refreshToken");
+      this.token = '';
+      this.refreshTokenV = '';
+      this.userData.clear();
+      this.router.navigate(['employee/login']);
     }
   }
 
-  isLoggedIn() {
-    if (isPlatformBrowser(this.platformId)) {
-        const token = localStorage.getItem('token'); 
-        if (token) {
-            this.token = token;
-            const payload = atob(token.split('.')[1]); 
-            const parsedPayload = JSON.parse(payload); 
-            var loggedIn = (parsedPayload.exp > Date.now() / 1000);
-            const refreshToken = localStorage.getItem('refreshToken'); 
-            if (!loggedIn && refreshToken) {
-
-            }
-            return loggedIn;
-        } else {
-            this.token = "";
-        }
+  /** Check if user is logged in */
+  async isLoggedIn(): Promise<boolean> {
+    const token = this.getToken();
+  
+    if (!token) return false; // No token, user is not logged in
+  
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      
+      if (payload.exp > Date.now() / 1000) {
+        return true; // Token is still valid
+      } else {
+       // console.warn("Token expired, attempting refresh...");
+        const newToken = await firstValueFrom(this.refreshToken());
+  
+        return !!newToken; // Returns true if refresh is successful
+      }
+    } catch (error) {
+      return false; // Invalid token, return false
     }
-    return false;
   }
+  
 
+  /** Login user */
   login(username: string, password: string): Observable<any> {
     const url = `${environment.AUTH_API}/Authentication/GetToken`;
     return this.http.post(url, { username, password }).pipe(
@@ -143,34 +183,26 @@ export class AuthService {
     );
   }
 
-  getUserInfo(username: string): Observable<any> {
-    const url = `${environment.AUTH_API}/Authentication/GetUserInfo`;
-    return this.http.get(url, { headers: { username: username, token: this.token }}).pipe(
-        catchError(this.handleError)
-    );
+  getEmployeeById(id: string): Observable<any> {
+    return this.http.get<any>(`${environment.AUTH_API}/employee-management/employees/${id}`);
+  }
+  
+
+  /** Change Password */
+  changePassword(oldPassword: string, newPassword: string): Observable<any> {
+    const url = `${environment.AUTH_API}/Authentication/ChangePassword`;
+    return this.http.post(url, {}, {
+      headers: new HttpHeaders({
+        oldPassword, 
+        newPassword,
+        authorization: `Bearer ${this.token}`
+      })
+    }).pipe(catchError(this.handleError));
   }
 
-  changePassword(oldPassword: string, newPassword: string): Observable<any> {
-    if (isPlatformBrowser(this.platformId)) {
-        const tokenStorage = localStorage.getItem('token'); 
-        if (tokenStorage) {
-            this.token = tokenStorage;
-        }
-    }
-    const url = `${environment.AUTH_API}/Authentication/ChangePassword`;
-    return this.http.post(url, {}, { headers: { oldPassword: oldPassword, newPassword: newPassword, token: this.token, authorization: `Bearer ${this.token}` } }).pipe(
-        catchError(this.handleError)
-    );
-}
-
-
+  /** Handle API Errors */
   private handleError(error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent) {
-      console.error('An error occurred:', error.error.message);
-    } else {
-      console.error(`Backend returned code ${error.status}, ` +
-        `body was: ${error.error}`);
-    }
-    return throwError('Something bad happened; please try again later.');
+    console.error("AuthService Error:", error);
+    return throwError('Something went wrong; please try again later.');
   }
 }

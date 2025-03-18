@@ -18,7 +18,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { httpInterceptInterceptor } from './http-intercept.interceptor';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -50,7 +50,17 @@ import { EditorModule } from 'primeng/editor';
 import { NgprimedebugComponent } from './developer/ngprimedebug/ngprimedebug.component';
 import { EmployeedebugComponent } from './developer/employeedebug/employeedebug.component';
 import { ModpageComponent } from './modpage/modpage.component';
-import { ItemviewComponent } from './mod/itemview/itemview.component'
+import { ItemviewComponent } from './mod/itemview/itemview.component';
+import { AppointmentComponent } from './billing/appointment/appointment.component'
+import { AuthInterceptor } from './auth-interceptor.interceptor';
+import { EmployeeManagementComponent } from './employee/hr/employee-management/employee-management.component';
+import { EmployeeDialogComponent } from './employee/hr/employee-dialog/employee-dialog.component';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+import { ManagementProfileComponent } from './employee/management/profile/profile.component';
+import { OrderbyPipe } from './orderby.pipe';
+import { MatTreeModule } from '@angular/material/tree';
+import { IncidentModalComponent } from './employee/management/modals/incident-modal/incident-modal.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +83,13 @@ import { ItemviewComponent } from './mod/itemview/itemview.component'
     NgprimedebugComponent,
     EmployeedebugComponent,
     ModpageComponent,
-    ItemviewComponent
+    ItemviewComponent,
+    AppointmentComponent,
+    EmployeeManagementComponent,
+    EmployeeDialogComponent,
+    ManagementProfileComponent,
+    OrderbyPipe,
+    IncidentModalComponent
   ],
   imports: [
     EditorModule,
@@ -99,10 +115,18 @@ import { ItemviewComponent } from './mod/itemview/itemview.component'
     MatButtonModule,
     ReactiveFormsModule,
     MatListModule,
+    MatTreeModule,
+    MatSelectModule,
+    MatChipsModule,
     MatTooltipModule,
+    MatOptionModule,
     HttpClientModule
 ],
-  providers: [provideClientHydration(), provideAnimationsAsync(), provideHttpClient(withInterceptors([httpInterceptInterceptor]))],
+  providers: [
+    provideClientHydration(), 
+    provideAnimationsAsync(), 
+    provideHttpClient(withInterceptors([httpInterceptInterceptor, AuthInterceptor]))
+    ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
