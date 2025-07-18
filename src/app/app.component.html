@@ -24,13 +24,13 @@
             <mat-icon>policy</mat-icon>
             <span>Policy & Compliance</span>
         </button>
-        <div *ngIf="authService.employeeInfo?.userId == null">
+        <div *ngIf="authService.getToken() == null">
             <button mat-menu-item (click)="goTo('employee/login')">
                 <mat-icon>badge</mat-icon>
                 <span>Employee Login</span>
             </button>
         </div>
-        <div *ngIf="authService.employeeInfo?.userId != null">
+        <div *ngIf="authService.getToken() != null">
             <button mat-menu-item (click)="goTo('employee/profile')">
                 <mat-icon>badge</mat-icon>
                 <span>Employee Profile</span>

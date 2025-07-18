@@ -61,6 +61,7 @@ import { ManagementProfileComponent } from './employee/management/profile/profil
 import { OrderbyPipe } from './orderby.pipe';
 import { MatTreeModule } from '@angular/material/tree';
 import { IncidentModalComponent } from './employee/management/modals/incident-modal/incident-modal.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -98,6 +99,7 @@ import { IncidentModalComponent } from './employee/management/modals/incident-mo
     BrowserModule, 
     AppRoutingModule,     
     MatToolbarModule,
+    MatSnackBarModule,
     MatDialogModule,
     MatExpansionModule,
     MatSidenavModule,

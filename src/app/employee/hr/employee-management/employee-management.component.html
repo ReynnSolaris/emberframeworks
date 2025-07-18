@@ -76,6 +76,9 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef class="actions-header"> Actions </th>
           <td mat-cell *matCellDef="let employee" class="action-buttons">
+            <button mat-icon-button (click)="gotoFile(employee.userId)">
+                <mat-icon>article</mat-icon>
+              </button>
             <button mat-icon-button (click)="openDialog(employee)">
               <mat-icon>edit</mat-icon>
             </button>

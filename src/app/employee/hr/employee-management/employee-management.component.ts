@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { EmployeeDialogComponent } from '../employee-dialog/employee-dialog.component';
 import { environment } from '../../../../environments/environment';
 import { DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-employee-management',
@@ -12,10 +13,11 @@ import { DatePipe } from '@angular/common';
   providers: [DatePipe]
 })
 export class EmployeeManagementComponent implements OnInit {
+
   employees: any[] = [];
   displayedColumns: string[] = ['userId', 'userName', 'fullName', 'role', 'jobTitle', 'salary', 'positionType', 'actions', 'deletedTime'];
 
-  constructor(private datePipe: DatePipe, private http: HttpClient, public dialog: MatDialog) {}
+  constructor(private datePipe: DatePipe, private router: Router, private http: HttpClient, public dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.loadEmployees();
@@ -47,6 +49,10 @@ export class EmployeeManagementComponent implements OnInit {
       console.log(data);
     });
   }
+
+  gotoFile(empId: any) {
+        this.router.navigate([`/hr/employee-management/${empId}`]);
+    }
 
   openDialog(employee?: any) {
     const dialogRef = this.dialog.open(EmployeeDialogComponent, {

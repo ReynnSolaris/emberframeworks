@@ -195,7 +195,8 @@ export class AuthService {
       headers: new HttpHeaders({
         oldPassword, 
         newPassword,
-        authorization: `Bearer ${this.token}`
+        authorization: `Bearer ${this.token}`,
+        token: `${this.token}`
       })
     }).pipe(catchError(this.handleError));
   }
@@ -203,6 +204,15 @@ export class AuthService {
   /** Handle API Errors */
   private handleError(error: HttpErrorResponse) {
     console.error("AuthService Error:", error);
+    if (error.status == 400) {
+        return throwError("Bad Request");
+    }
+    if (error.status == 401) {
+        return throwError(error.error);
+    }
+    if (error.status == 429) {
+        return throwError("You have tried logging in to many times, you have been locked out for 30 minutes.");
+    }
     return throwError('Something went wrong; please try again later.');
   }
 }

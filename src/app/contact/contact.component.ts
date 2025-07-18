@@ -1,81 +1,60 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MainApiService } from '../main-api.service';
-import { catchError, of } from 'rxjs';
-import { ok } from 'assert';
-import {
-    MatDialog,
-    MAT_DIALOG_DATA,
-    MatDialogTitle,
-    MatDialogContent,
-  } from '@angular/material/dialog';
-  
+import { Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { FormapiService } from '../formapi.service';
+
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.css']
 })
-export class ContactComponent implements OnInit {
-  contactForm: FormGroup = this.formBuilder.group({
-    name: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
-    message: ['', Validators.required]
-  });;
-
+export class ContactComponent {
   sending = false;
+  onSubmit = false;
+  showAlert = false;
+  alertMessage = '';
+  color: string = '';
 
-  constructor(private formBuilder: FormBuilder, public dialog: MatDialog, private api: MainApiService) {}
+    contactFormValues = {
+    name: '',
+    email: '',
+    body: '',
+    number: '',
+    };
 
-  ngOnInit(): void {
-    this.openDialog();
+  constructor(private mailService: FormapiService) {}
+
+  get alertColor() {
+    return `text-${this.color}-400`;
   }
 
-  openDialog() {
-
+  hideAlert() {
+    setTimeout(() => {
+      this.showAlert = false;
+    }, 5000);
   }
 
- submitForm() {
-    if (this.contactForm.valid) {
-      // Handle form submission
-      var msg = "";
-      var errored = false;
-      this.sending = true;
-      try {
-        var a = (this.api.submitContactReq(JSON.stringify(this.contactForm.getRawValue()))).subscribe({ 
-            next: (result: any) => {
-                msg = result.msg;
-            },
-            error: (err: any) => {
-                    errored = true;
-                    msg = err.message;
-                },
-            complete: () => {
-                this.sending = false;
-                this.dialog.open(ContactDialog, {
-                    data: {
-                      message: msg,
-                      error: errored
-                    },
-                  });
-                  this.contactForm.reset();
-            }
-        });
-      } catch(exception) {
+  async submitEmail(contactForm: NgForm) {
+    this.onSubmit = true;
 
-      }
-    } else {
-      this.contactForm.markAllAsTouched();
+    const formData = new FormData();
+    formData.append('fullName', this.contactFormValues.name);
+    formData.append('phone', this.contactFormValues.number);
+    formData.append('email', this.contactFormValues.email);
+    formData.append('message', this.contactFormValues.body);
+
+    try {
+      const res = await this.mailService.sendEmail(formData).toPromise();
+
+      this.alertMessage = 'Email sent successfully!';
+      this.color = 'green';
+      contactForm.resetForm();
+    } catch (err) {
+      this.alertMessage = 'Something went wrong, try again later!';
+      this.color = 'red';
     }
+
+    this.onSubmit = false;
+    this.showAlert = true;
+    this.hideAlert();
   }
 }
-
-
-@Component({
-    selector: 'contact-dialog',
-    templateUrl: 'contact-dialog.html',
-    standalone: true,
-    imports: [MatDialogTitle, MatDialogContent],
-  })
-  export class ContactDialog {
-    constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
-  }

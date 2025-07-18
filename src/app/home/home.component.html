@@ -1,16 +1,16 @@
 
-<div class="container fade-in" >
+<div class="container fade-in" style="align-self: center!important; justify-self: center!important;" >
     
     <div class="header" >
         <div class="logo-container" >
-          <img src="/assets/efllc_logo.png" alt="Ember Frameworks LLC Logo" class="logo">
+          <img src="/assets/efllc_logo.png" style="align-self: center!important; justify-self: center!important; align-content: center!important;" alt="Ember Frameworks LLC Logo" class="logo">
         </div>
-        <div style="width: 50%;">
+        <div style="width: 50%; align-self: center!important; align-content: center!important; justify-self: center!important; align-content: center!important;">
             <mat-card-title style="font-size: larger;">
                 <b>Welcome!</b>
             </mat-card-title>
             <mat-card-content>
-            <p>
+            <p style="align-content: center!important; justify-content: center!important; align-content: center!important;">
                 Ember Frameworks LLC, proudly based in Clarksville, Tennessee, is your trusted local partner for all your technology needs. Whether you're a thriving business or a household seeking tech solutions, we're here to help you thrive in the digital age.
                 <br/><br/>
                 <b style="font-size: 24px;">What Sets Us Apart:</b>
@@ -47,7 +47,29 @@
                 font-size: 14px;
                 cursor: pointer;
                 display: inline-block;
-                " href="https://app.squareup.com/appointments/book/s3ed5dmj18x4am/LBND88Z892YCN/start" rel="nofollow">Book an Appointment</a>
+                " href="https://app.squareup.com/appointments/book/s3ed5dmj18x4am/LBND88Z892YCN/start" rel="nofollow">Book an Appointment</a><br/><br/>
+                <button
+                routerLink="contact"
+                (click)="goTo('/contact')"
+                style="
+                    background-color: #1bff5f;
+                    border: none;
+                    color: rgb(65, 64, 64);
+                    height: 40px;
+                    text-transform: uppercase;
+                    font-family: 'Square Market', sans-serif;
+                    letter-spacing: 1px;
+                    line-height: 38px;
+                    padding: 0 28px;
+                    border-radius: 32px;
+                    font-weight: 500;
+                    font-size: 14px;
+                    cursor: pointer;
+                    display: inline-block;
+                "
+                >
+                Contact Us
+                </button>
                 <!-- End Square Appointments Embed code --><br/><br/>
                 Ready to experience the Ember Frameworks LLC difference? Contact us today to learn more about our services, schedule a consultation, or take advantage of our military discounts. Let's embark on a journey towards a brighter, more connected future together.</p>
             </mat-card-content>
@@ -79,33 +101,6 @@
         </div>
       </div>
         -->
-    </div>
-    <div class="content">
-        <div class="company-info">
-            <h2>Company Information</h2>
-            <nav>
-            <ul>
-                <li><strong>Fax:</strong> xxx-xxx-xxxx</li>
-                <li><strong>Email:</strong> support&#64;emberframeworks.xyz</li>
-                <li><strong>Phone:</strong> xxx-xxx-xxxx</li>
-            </ul>
-            </nav>
-        </div>
-    <br/>
-        <div class="team">
-        <h2>Our Team</h2>
-        <div class="team-container">
-            <div class="team-member">
-            <div class="card">
-                <img src="/assets/headshot.jpg" alt="Rainn Sideris">
-                <div class="info">
-                <h3>Rainn Sideris</h3>
-                <p>Chief Executive Officer and Main Technician</p>
-                </div>
-            </div>
-            </div>
-        </div>
-        </div>
     </div>
   </div>
   <div class="customer-reviews" style="width: 100%; align-items: center!important; align-content: center!important; text-align: center!important;">

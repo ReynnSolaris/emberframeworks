@@ -41,7 +41,7 @@ export class LoginComponent {
             // Handle successful login (e.g., redirect to dashboard)
           },
           error => {
-            this.errorMessage = 'Invalid username or password';
+            this.errorMessage = error;
             this.signingIn = false;
             console.error('Login error:', error);
           }

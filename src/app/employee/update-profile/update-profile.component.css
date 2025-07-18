@@ -21,3 +21,32 @@
     width: 100%;
   }
   
+  .snack-success {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  .snack-error {
+    background-color: #f44336;
+    color: white;
+  }
+
+  
+  @media (max-width: 768px) {
+    .update-profile-container {
+      padding: 10px;
+    }
+  
+    mat-card {
+      padding: 12px;
+    }
+  
+    table {
+      font-size: 14px;
+    }
+  
+    button mat-icon {
+      font-size: 20px;
+    }
+  }
+  

@@ -1,5 +1,6 @@
 import { trigger, transition, style, animate } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -21,6 +22,14 @@ import { Component, OnInit } from '@angular/core';
 export class HomeComponent implements OnInit {
   loaded: boolean = false;
   containerClass: string = "container";
+    
+  constructor(private router: Router) {}
+
+    goTo(path: string) {
+    this.router.navigate([path]).then(() => {
+        window.location.reload();
+      });
+    }
   ngOnInit(): void {
     // Simulate loading effect with a delay
     setTimeout(() => {

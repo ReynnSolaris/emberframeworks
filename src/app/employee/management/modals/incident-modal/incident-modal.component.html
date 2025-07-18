@@ -1,27 +1,40 @@
-<mat-dialog-content class="bg-gray-900 text-white p-6 rounded-lg w-[600px] max-w-full">
+<mat-dialog-content class="bg-gray-950 text-white p-6 rounded-lg w-[600px] max-w-full border border-gray-800 shadow-lg">
     <!-- Header -->
-    <div class="flex justify-between items-center border-b border-gray-700 pb-2 mb-4">
-      <h2 class="text-lg font-semibold">
-        {{ incident.type }} - {{ incident.date }}
+    <div class="flex justify-between items-center border-b border-gray-800 pb-3 mb-4">
+      <h2 class="text-xl font-semibold flex items-center gap-2 text-mint-green">
+        <mat-icon class="text-persimmon">report_problem</mat-icon>
+        {{ incident.incidentType?.typeName }} - {{ incident.dateOccurred | date: 'medium' }}
       </h2>
-      <button mat-icon-button (click)="closeDialog()">
-        <mat-icon class="text-gray-400 hover:text-white">close</mat-icon>
+      <button mat-icon-button (click)="closeDialog()" class="hover:bg-gray-800 rounded-full p-1">
+        <mat-icon class="text-gray-500 hover:text-persimmon">close</mat-icon>
       </button>
     </div>
   
     <!-- Reported By -->
-    <div class="text-sm text-gray-400 mb-2">
-      Reported By: <span class="text-white">{{ incident.reportedBy }}</span> ({{ incident.reportedById }})
+    <div class="flex items-center text-sm text-gray-400 mb-4">
+      <mat-icon class="text-mint-green mr-2">person</mat-icon>
+      <span class="text-white font-medium">{{ incident.reportedByUser.userName }}</span> 
+      <span class="text-gray-500">({{ incident.reportedBy }})</span>
     </div>
   
     <!-- Incident Details -->
-    <pre class="bg-gray-800 text-gray-200 p-4 rounded-md text-sm overflow-x-auto">{{ incident.details }}</pre>
+    <div class="bg-gray-900 p-4 rounded-md shadow-md text-sm leading-relaxed border border-gray-700">
+      <mat-icon class="text-persimmon mr-1 align-middle">description</mat-icon>
+      <span class="text-gray-300 font-medium">Details:</span>
+      <pre class="mt-2 text-gray-200 whitespace-pre-wrap">{{ incident.details }}</pre>
+    </div>
   
     <!-- Actions -->
-    <div class="flex justify-end space-x-3 mt-4">
-      <button mat-button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-md" (click)="closeDialog()">Close</button>
-      <button mat-button class="bg-mint-green-500 hover:bg-mint-green-600 text-black px-4 py-2 rounded-md">Edit</button>
-      <button mat-button class="bg-persimmon-500 hover:bg-persimmon-600 text-white px-4 py-2 rounded-md">Delete</button>
+    <div class="flex justify-end space-x-3 mt-6">
+      <button mat-button class="bg-gray-800 hover:bg-gray-700 text-white px-5 py-2 rounded-md" (click)="closeDialog()">
+        Close
+      </button>
+      <button mat-button class="bg-mint-green hover:bg-mint-green-500 text-black px-5 py-2 rounded-md shadow-md">
+        Edit
+      </button>
+      <button mat-button class="bg-persimmon hover:bg-persimmon-500 text-white px-5 py-2 rounded-md shadow-md">
+        Delete
+      </button>
     </div>
   </mat-dialog-content>
   
